@@ -170,23 +170,47 @@ class SemanticAnalyzer:
         """
         current_node = self.tree.analysis_tree[node_id]
         parameter_list = []
-        if current_node.child_num == 3:
+        if current_node.child_num == 3:  # var_declaration → idlist : type{insert_item()}
             parameter_list = self.idlist(current_node.child[0])
-            item_type = self.type(current_node.child[2])
-        elif current_node.child_num == 5:
+            item_info = self.type(current_node.child[2])
+            for parameter in parameter_list:
+                new_item = Item(parameter.name, item_info[0], item_info[1],
+                                None, None, None, parameter.row, [])
+                if not self.st_manager.insert_item(new_item, self.st_manager.current_table_name):
+                    print("语义错误：第{0}行, 第{1}列: {2}重定义或该符号表不存在".format(parameter.row, parameter.column, parameter.name))
+                    self.result = False
+        else:  # var_declaration → var_declaration ; idlist : type{insert_item()}
             self.var_declaration(current_node.child[0])
             parameter_list = self.idlist(current_node.child[2])
-            item_type = self.type(current_node.child[4])
-
-
+            item_info = self.type(current_node.child[4])
+            for parameter in parameter_list:
+                new_item = Item(parameter.name, item_info[0], item_info[1],
+                                None, item_info[3], item_info[2][1], parameter.row, [])
+                if not self.st_manager.insert_item(new_item, self.st_manager.current_table_name):
+                    print("语义错误：第{0}行, 第{1}列: {2}重定义或该符号表不存在".format(parameter.row, parameter.column, parameter.name))
+                    self.result = False
 
     def type(self, node_id):
         """
         type → basic_type {type.value = basic_type}
         type → array [ period ] of basic_type{type.id = array;type.value = basic_type;
                                             type.demension=period.demension;type.parameters=period.parameters}
+        返回值：item_info = [变量类型，元素类型，数组大小(size, period)，数组维数]
         """
-
+        current_node = self.tree.analysis_tree[node_id]
+        item_info = []
+        if current_node.child_num == 1:
+            var_type = self.basic_type(current_node.child[0])
+            item_info = ["var", var_type, (None, None), None]
+        else:
+            array_period = self.period(current_node.child[2])
+            array_type = self.basic_type(current_node.child[5])
+            size = 0
+            for item in array_period:
+                size += (item[1] - item[0])
+            if len(array_period) > 0:
+                item_info = ["array", array_type, (size, array_period), len(array_period)]
+        return item_info
 
     def basic_type(self, node_id):
         """
@@ -195,7 +219,9 @@ class SemanticAnalyzer:
         basic_type → boolean {basic_type=boolean}
         basic_type → char{basic_type=char}
         """
-
+        # current_node = self.tree.analysis_tree[node_id]
+        child_node = self.tree.find_child_node(node_id, 0)
+        return child_node.token
 
     def period(self, node_id):
         """
@@ -206,38 +232,82 @@ class SemanticAnalyzer:
         current_node = self.tree.analysis_tree[node_id]
         array_period = []
         if current_node.child_num == 3:
-            child1 = self.tree.find_child_node(node_id, 0)
-            child2 = self.tree.find_child_node(node_id, 2)
-            child1_value = child1.value
-            child2_value = child2.value
-            if type(child1.value) == type(1.0) or child1.value < 0:
-                print('语义错误：第{0}行, 第{1}列: 数组下标必须为非负整数'.format(child1.row, child1.column))  # 同时输出行，列
-                self.result = False
-                return array_period
-            if type(child2.value) == type(1.0) or child1.value < 0:
-                print('语义错误：第{0}行, 第{1}列: 数组下标必须为非负整数'.format(child2.row, child2.column))  # 同时输出行，列
-                self.result = False
-                return array_period
-            if child1.value > child2_value:
-                print('语义错误：第{0}行, 第{1}列: 数组上下限错误'.format(child2.row, child2.column))  # 同时输出行，列
-                self.result = False
-                return array_period
-            array_period.append((child1.value, child2.value))
-        elif current_node.child_num == 5:
-            array_period = self.period(current_node.child[0])
-            child1 = self.tree.find_child_node(node_id, 2)
-            child2 = self.tree.find_child_node(node_id, 4)
-            if type(child1.value) == type(1.0) or child1.value < 0:
-                print('语义错误：第{0}行, 第{1}列: 数组下标必须为非负整数'.format(child1.row, child1.column))  # 同时输出行，列
-                self.result = False
-                return array_period
-            if type(child2.value) == type(1.0) or child1.value < 0:
-                print('语义错误：第{0}行, 第{1}列: 数组下标必须为非负整数'.format(child2.row, child2.column))  # 同时输出行，列
-                self.result = False
-                return array_period
-            if child1.value > child2.value:
-                print('语义错误：第{0}行, 第{1}列: 数组上下限错误'.format(child2.row, child2.column))  # 同时输出行，列
-                self.result = False
-                return array_period
-            array_period.append((child1.value, child2.value))
+            num_node1 = self.tree.find_child_node(node_id, 0)
+            num_node2 = self.tree.find_child_node(node_id, 2)
+        else:
+            new_array_period = self.period(current_node.child[0])
+            if len(new_array_period) != 0:
+                array_period.extend(new_array_period)
+            num_node1 = self.tree.find_child_node(node_id, 2)
+            num_node2 = self.tree.find_child_node(node_id, 4)
+
+        if num_node1.value < 0 or not isinstance(num_node1.value, int):
+            print('语义错误：第{0}行, 第{1}列: 数组下标必须为非负整数'.format(num_node1.row, num_node1.column))  # 同时输出行，列
+            self.result = False
+            return array_period
+        if num_node2.value < 0 or not isinstance(num_node2.value, int):
+            print('语义错误：第{0}行, 第{1}列: 数组下标必须为非负整数'.format(num_node2.row, num_node2.column))  # 同时输出行，列
+            self.result = False
+            return array_period
+        if num_node1.value > num_node2.value:
+            print('语义错误：第{0}行, 第{1}列: 数组上下限错误'.format(num_node2.row, num_node2.column))  # 同时输出行，列
+            self.result = False
+            return array_period
+        array_period.append((num_node1.value, num_node2.value))
         return array_period
+
+    def subprogram_declarations(self, node_id):
+        """
+        subprogram_declarations → subprogram_declarations subprogram ;
+        subprogram_declarations → ε
+        """
+        current_node = self.tree.analysis_tree[node_id]
+        if current_node.child_num == 3:
+            self.subprogram_declarations(current_node.child[0])
+            self.subprogram(current_node.child[1])
+
+    def subprogram(self, node_id):
+        """
+        subprogram → subprogram_head ; subprogram_body
+        """
+        current_node = self.tree.analysis_tree[node_id]
+        self.subprogram_head(current_node.child[0])
+        self.subprogram_body(current_node.child[2])
+
+    def subprogram_head(self, node_id):
+        """
+        subprogram_head → procedure id formal_parameter
+                                    {parameters=formal_parameter.list;make_table()}
+        subprogram_head → function id formal_parameter : basic_type
+                            {parameters=formal_parameter.list;return_type=basic_type;make_table()}
+        """
+
+
+    def formal_parameter(self, node_id):
+        """
+        formal_parameter → ( parameter_list ){formal_parameter.list=parameter_list}
+        formal_parameter → ε{formal_parameter.list=[]}
+        """
+
+    def parameter_list(self, node_id):
+        """
+        parameter_list → parameter_list ; parameter {parameter_list.append(parameter)}
+        parameter_list → parameter{parameter_list.append(parameter)}
+        """
+
+    def parameter(self, node_id):
+        """
+        parameter → var_parameter{parameter=var_parameter}
+        parameter → value_parameter{parameter=value_parameter}
+        """
+
+    def var_parameter(self, node_id):
+        """
+        var_parameter → var
+        """
+
+    def value_parameter(self, node_id):
+        """
+        value_parameter{value_parameter.id='var';var_parameter=value_parameter}
+        value_parameter → idlist : basic_type{idlist.type = basic_type;value_parameter=idlist}
+        """
