@@ -76,6 +76,9 @@ class SemanticAnalyzer:
             parameters.append(Parameter(child_node.value, None, child_node.row, child_node.column, False))
         return parameters
 
+    """
+        常量声明部分
+    """
     def const_declarations(self, node_id):
         """
         const_declarations → const const_declaration ;
@@ -153,6 +156,9 @@ class SemanticAnalyzer:
         const_value_type = (const_value, const_type)
         return const_value_type
 
+    """
+        变量声明部分
+    """
     def var_declarations(self, node_id):
         """
         var_declarations → var var_declaration ;
@@ -256,6 +262,9 @@ class SemanticAnalyzer:
         array_period.append((num_node1.value, num_node2.value))
         return array_period
 
+    """
+        过程、函数声明部分
+    """
     def subprogram_declarations(self, node_id):
         """
         subprogram_declarations → subprogram_declarations subprogram ;
@@ -360,3 +369,239 @@ class SemanticAnalyzer:
         for i, value in enumerate(parameters):
             parameters[i].type = parameter_type
         return parameters
+
+    """
+        程序体部分
+    """
+    def subprogram_body(self, node_id):
+        """
+        subprogram_body → const_declarations var_declarations compound_statement
+        """
+        current_node = self.tree.analysis_tree[node_id]
+        self.const_declarations(current_node.child[0])
+        self.var_declarations(current_node.child[1])
+        self.compound_statement(current_node.child[2])
+
+    def compound_statement(self, node_id):
+        """
+        compound_statement → begin statement_list end
+        """
+        current_node = self.tree.analysis_tree[node_id]
+        self.statement_list(current_node.child[1])
+
+    def statement_list(self, node_id):
+        """
+        statement_list → statement_list ; statement
+        statement_list → statement
+        """
+        current_node = self.tree.analysis_tree[node_id]
+        if current_node.child_num == 1:
+            self.statement(current_node.child[0])
+        elif current_node.child_num == 3:
+            self.statement_list(current_node.child[0])
+            self.statement(current_node.child[2])
+
+    def statement(self, node_id):
+        """
+        statement → variable assignop expression
+        statement → procedure_call
+        statement → compound_statement
+        statement → if expression then statement else_part
+        statement → for id assignop expression to expression do statement
+        statement → read ( variable_list ) {search_item()???为什么不在收集上来之前测试}
+        statement → write ( expression_list ){search_item()???为什么不在收集上来之前测试}
+        statement → ε
+        """
+        current_node = self.tree.analysis_tree[node_id]
+        if current_node.child_num == 1:
+            child_node = self.tree.find_child_node(node_id, 0)
+            if child_node.token == "procedure_call":
+                self.procedure_call(child_node.id)
+            elif child_node.token == "compound_statement":
+                self.compound_statement(child_node.id)
+        elif current_node.child_num == 3:
+            child_node1 = self.tree.find_child_node(node_id, 0)
+            child_node2 = self.tree.find_child_node(node_id, 1)  # 也许要用到assignop的相关操作
+            child_node3 = self.tree.find_child_node(node_id, 2)
+            variable = self.variable(child_node1.id)
+            return_type = self.expression(child_node3.id)
+            if len(variable) == 0 or len(return_type) == 0:
+                return
+            result_item = self.st_manager.search_item(variable[0], self.st_manager.current_table_name)
+            if result_item != None:
+                if variable[1] == 'array':
+                    variable[1] = variable[4]
+                if variable[1] == return_type[1]:
+                    pass
+                elif variable[1] == 'real' and return_type[1] == 'integer':
+                    print('语义错误：第{0}行, 第{1}列: 尝试将integer型的值赋给一个real型的变量'.format(variable[2], variable[3]))
+                    self.result = False
+                elif variable[1] == 'integer' and return_type[1] == 'real':
+                    print('语义错误：第{0}行, 第{1}列: 尝试将real型的值赋给一个int型的变量'.format(variable[2], variable[3]))
+                    self.result = False
+                else:
+                    # print(return_type[1])
+                    # print(variable[1])
+                    print('语义错误：第{0}行, 第{1}列: 变量类型不匹配，无法赋值'.format(variable[2], variable[3]))
+                    self.result = False
+            else:
+                print('语义错误：第{0}行, 第{1}列: 变量未定义'.format(variable[2], variable[3]))
+                self.result = False
+            '''
+            if variable isdefined:
+                if variable.type == return_type:
+                    成功
+                else:
+                    报错 result = false
+            else:
+                报错 result = false
+            '''
+
+        elif current_node.child_num == 5:
+            return_type = self.expression(current_node.child[1])  # if a then b: a 应该为boolean表达式
+            if len(return_type) == 0:
+                self.result = False
+            elif return_type[1] != 'boolean':
+                print('语义错误：第{0}行: if A then B：A 应该为布尔表达式'.format(self.tree.find_child_node(node_id, 0).row))  # 选择 if 那一行
+                self.result == False
+            self.statement(current_node.child[3])
+            self.else_part(current_node.child[4])
+        elif current_node.child_num == 4:
+            return_type = self.expression(current_node.child[1])  # 暂时不判断expression的返回值类型
+            if len(return_type) > 0:
+                if return_type[1] == 'boolean':
+                    self.statement(current_node.child[3])
+                else:
+                    print('语义错误：第{0}行: while A do B：A 应该为布尔表达式'.format(self.tree.find_child_node(node_id, 0).row))  # 选择 if 那一行'
+                    self.result = False
+            else:
+                pass
+        elif current_node.child_num == 8:
+            child_id = self.tree.find_child_node(node_id, 1)
+            child_assignop = self.tree.find_child_node(node_id, 2)
+            return_type1 = self.expression(current_node.child[3])  # 第一个expression
+            return_type2 = self.expression(current_node.child[5])  # 第二个expression
+            result_item = self.STManager.search_symbol_table(child_id.value, self.STManager.current_table_name)
+            if result_item == None:
+                print("语义错误：第{0}行, 第{1}列: id未定义".format(child_id.row, child_id.column))
+                self.result = False
+            if result_item != None and len(return_type1) != 0 and len(return_type2) != 0:
+                result_item.used_row.append(child_id.row)
+                if result_item.value_type == 'integer'and return_type1[1] == 'integer' and return_type2[1] == 'integer':
+                    self.statement(current_node.child[7])
+                else:
+                    print('语义错误：第{0}行: for 语句中，迭代变量类型应为integer'.format(child_id.row))  # 选择id 那一行
+                    self.result = False
+            else:
+                self.result = False
+            '''
+            if child_id.value is_defined：
+                if (return_type1 == int && return_type2 == int) or 
+                   (return_type == char and return_type2 == char):
+                    if return_type1 = id.type:
+                        才进行statement
+            else：
+                报错
+            '''
+        elif current_node.child_num == 4:
+            child = self.tree.find_child_node(node_id, 0)
+            if child.token == 'read':
+                variable_list = self.variable_list(current_node.child[2])
+                if len(variable_list) != 0:
+                    for item in variable_list:
+                        result_item = self.STManager.search_symbol_table(item[0], self.STManager.current_table_name)
+                        if result_item == None:
+                            print('语义错误：第{0}行, 第{1}列: 变量{2}未定义'.format(item[2], item[3], item[0]))
+                            self.result = False
+                        else:
+                            result_item.used_row.append(item[2])
+            elif child.token == 'write':
+                expression_list = self.expression_list(current_node.child[2])
+                if len(expression_list) != 0:
+                    for item in expression_list:
+                        if item[0] != 'expression':
+                            result_item = self.STManager.search_symbol_table(item[0], self.STManager.current_table_name)
+                            if result_item == None:
+                                print('语义错误：第{0}行, 第{1}列: 变量{2}未定义'.format(item[2], item[3], item[0]))
+                                self.result = False
+                            else:
+                                result_item.used_row.append(item[2])
+                        else:  # 如果是expression
+                            pass
+                else:
+                    pass
+                '''
+                如果是标识符，则判断是否定义
+                如果是返回值，则
+                '''
+        else:
+            pass  # 可能有错误处理
+
+    def variable_list(self, node_id):
+        """
+        variable_list → variable_list , variable {variable_list.append()}
+        variable_list → variable{variable_list.append()}
+        """
+
+    def variable(self, node_id):
+        """
+        variable → id id_varpart{search_item();可能需要数组越界检查}
+        """
+
+    def id_varpart(self, node_id):
+        """
+        id_varpart → [ expression_list ] {id_varpart=expression_list}
+        id_varpart → ε
+        """
+
+    def procedure_call(self, node_id):
+        """
+        procedure_call → id
+        procedure_call → id ( expression_list ){id=search_item();传参判定}
+        """
+
+    def else_part(self, node_id):
+        """
+        else_part → else statement
+        else_part → ε
+        """
+
+    def expression_list(self, node_id):
+        """
+        expression_list → expression_list , expression {expression_list.append()}
+        expression_list → expression{expression_list.append()}
+        """
+
+    def expression(self, node_id):
+        """
+        expression → simple_expression relop simple_expression{逻辑判断决定赋值}
+        expression → simple_expression{expression.type = simple_expression.type}
+        """
+
+    def simple_expression(self, node_id):
+        """
+        simple_expression → simple_expression addop term {逻辑判断决定赋值}
+        simple_expression → term{simple_expression.type = term.type}
+        """
+
+    def term(self, node_id):
+        """
+        term → term mulop factor{逻辑判断决定赋值}
+        term → factor{term.type = factor.type}
+        """
+
+    def factor(self, node_id):
+        """
+        factor → num {factor.type = num.type}
+        factor → variable {factor.type = variable.type}
+        factor → id ( expression_list ){id.type=search_item();传参判定;factor.type = id.type}
+        factor → ( expression ) {factor.type = expression.type}
+        factor → not factor {factor.type = factor1.type}
+        factor → uminus factor {factor.type = factor1.type}
+        """
+
+
+
+
+
+
