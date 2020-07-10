@@ -281,33 +281,82 @@ class SemanticAnalyzer:
         subprogram_head → function id formal_parameter : basic_type
                             {parameters=formal_parameter.list;return_type=basic_type;make_table()}
         """
-
+        current_node = self.tree.analysis_tree[node_id]
+        id_node = self.tree.find_child_node(node_id, 1)
+        subprogram_name = id_node.value
+        parameters = self.formal_parameter(current_node.child[2])
+        if current_node.child_num == 3:
+            self.st_manager.make_table(subprogram_name, parameters, False, None)
+            # 新建一个子表，将current_table指向新的子表
+        elif current_node.child_num == 5:
+            return_type = self.basic_type(current_node.child[4])
+            self.st_manager.make_table(subprogram_name, parameters, True, return_type)
+            # 新建一个子表，将current_table指向新的子表
 
     def formal_parameter(self, node_id):
         """
         formal_parameter → ( parameter_list ){formal_parameter.list=parameter_list}
         formal_parameter → ε{formal_parameter.list=[]}
         """
+        current_node = self.tree.analysis_tree[node_id]
+        parameters = []
+        if current_node.child_num == 3:
+            parameters = self.parameter_list(current_node.child[1])
+        return parameters
 
     def parameter_list(self, node_id):
         """
         parameter_list → parameter_list ; parameter {parameter_list.append(parameter)}
         parameter_list → parameter{parameter_list.append(parameter)}
         """
+        current_node = self.tree.analysis_tree[node_id]
+        parameters = []
+        if current_node.child_num == 1:
+            new_parameters = self.parameter(current_node.child[0])
+            if new_parameters is not None:
+                parameters.extend(new_parameters)
+        elif current_node.child_num == 3:
+            new_parameters = self.parameter_list(current_node.child[0])
+            if new_parameters is not None:
+                parameters.extend(new_parameters)
+            new_parameters = self.parameter(current_node.child[2])
+            if new_parameters is not None:
+                parameters.extend(new_parameters)
+        return parameters
 
     def parameter(self, node_id):
         """
         parameter → var_parameter{parameter=var_parameter}
         parameter → value_parameter{parameter=value_parameter}
         """
+        # current_node = self.tree.analysis_tree[node_id]
+        child_node = self.tree.find_child_node(node_id, 0)
+        parameters = []
+        if child_node.token == 'var_parameter':
+            parameters = self.var_parameter(child_node.id)
+        elif child_node.token == 'value_parameter':
+            parameters = self.value_parameter(child_node.id)
+        return parameters
 
     def var_parameter(self, node_id):
         """
-        var_parameter → var
+        var_parameter → var value_parameter
+                            {value_parameter.id='var';var_parameter=value_parameter}
         """
+        child_node = self.tree.find_child_node(node_id, 1)
+        parameters = self.value_parameter(child_node.id)
+        for i, value in enumerate(parameters):
+            parameters[i].vary = True
+        return parameters
 
     def value_parameter(self, node_id):
         """
-        value_parameter{value_parameter.id='var';var_parameter=value_parameter}
-        value_parameter → idlist : basic_type{idlist.type = basic_type;value_parameter=idlist}
+        value_parameter → idlist : basic_type
+                                {idlist.type = basic_type;value_parameter=idlist}
         """
+        current_node = self.tree.analysis_tree[node_id]
+        parameters = self.idlist(current_node.child[0])
+        parameter_type = self.basic_type(current_node.child[2])
+        for i, value in enumerate(parameters):
+            parameters[i].type = parameter_type
+        return parameters

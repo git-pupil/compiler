@@ -56,7 +56,7 @@ class STManager:
 
     def make_table(self, name, parameter_list, is_func, return_type):
         """
-        创建一个新表，表名为name
+        创建一个新表，表名为name，并将当前所在的表修改为新表
         Parameters:
             name(str)：要创建的表名
             parameter_list(list)：过程/函数的形参表
