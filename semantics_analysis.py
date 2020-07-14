@@ -3,7 +3,7 @@ from analysis_tree import *
 
 
 class SemanticAnalyzer:
-    def __init__(self, analysis_tree=AnalysisTree(), st_manager=STManager()):
+    def __init__(self, analysis_tree=AnalysisTree(), st_manager=st_manager()):
         self.result = True  # 分析结果，false or true
         self.tree = analysis_tree  # 分析树
         self.st_manager = st_manager  # 符号表操作
@@ -79,6 +79,7 @@ class SemanticAnalyzer:
     """
         常量声明部分
     """
+
     def const_declarations(self, node_id):
         """
         const_declarations → const const_declaration ;
@@ -159,6 +160,7 @@ class SemanticAnalyzer:
     """
         变量声明部分
     """
+
     def var_declarations(self, node_id):
         """
         var_declarations → var var_declaration ;
@@ -265,6 +267,7 @@ class SemanticAnalyzer:
     """
         过程、函数声明部分
     """
+
     def subprogram_declarations(self, node_id):
         """
         subprogram_declarations → subprogram_declarations subprogram ;
@@ -373,6 +376,7 @@ class SemanticAnalyzer:
     """
         程序体部分
     """
+
     def subprogram_body(self, node_id):
         """
         subprogram_body → const_declarations var_declarations compound_statement
@@ -493,25 +497,26 @@ class SemanticAnalyzer:
             self.statement(current_node.child[3])
             self.else_part(current_node.child[4])
         elif current_node.child_num == 8:
-            child_id = self.tree.find_child_node(node_id, 1)
+            id_node = self.tree.find_child_node(node_id, 1)
             child_assignop = self.tree.find_child_node(node_id, 2)
             return_type1 = self.expression(current_node.child[3])  # 第一个expression
             return_type2 = self.expression(current_node.child[5])  # 第二个expression
-            result_item = self.STManager.search_symbol_table(child_id.value, self.STManager.current_table_name)
+            result_item = self.st_manager.search_symbol_table(id_node.value, self.st_manager.current_table_name)
             if result_item == None:
-                print("语义错误：第{0}行, 第{1}列: id未定义".format(child_id.row, child_id.column))
+                print("语义错误：第{0}行, 第{1}列: id未定义".format(id_node.row, id_node.column))
                 self.result = False
             if result_item != None and len(return_type1) != 0 and len(return_type2) != 0:
-                result_item.used_row.append(child_id.row)
-                if result_item.value_type == 'integer'and return_type1[1] == 'integer' and return_type2[1] == 'integer':
+                result_item.used_row.append(id_node.row)
+                if result_item.value_type == 'integer' and return_type1[1] == 'integer' and return_type2[
+                    1] == 'integer':
                     self.statement(current_node.child[7])
                 else:
-                    print('语义错误：第{0}行: for 语句中，迭代变量类型应为integer'.format(child_id.row))  # 选择id 那一行
+                    print('语义错误：第{0}行: for 语句中，迭代变量类型应为integer'.format(id_node.row))  # 选择id 那一行
                     self.result = False
             else:
                 self.result = False
             '''
-            if child_id.value is_defined：
+            if id_node.value is_defined：
                 if (return_type1 == int && return_type2 == int) or 
                    (return_type == char and return_type2 == char):
                     if return_type1 = id.type:
@@ -548,27 +553,27 @@ class SemanticAnalyzer:
         """
         variable = []
         current_node = self.tree.analysis_tree[node_id]
-        child_id = self.tree.find_child_node(node_id, 0)
-        child_id_varpart = self.tree.find_child_node(node_id, 1)
-        current_item = self.STManager.search_symbol_table(child_id.value, self.STManager.current_table_name)
+        id_node = self.tree.find_child_node(node_id, 0)
+        id_node_varpart = self.tree.find_child_node(node_id, 1)
+        current_item = self.st_manager.search_symbol_table(id_node.value, self.st_manager.current_table_name)
         if current_item != None:
-            current_item.used_row.append(child_id.row)
+            current_item.used_row.append(id_node.row)
             # identifier_type = {'function', 'procedure', 'program'}
             # if current_item.identifier_type not in identifier_type:
             self.id_varpart(current_node.child[1])
             if current_item.identifier_type == 'array':
-                if child_id_varpart.child_num == 3:
-                    variable = [current_item.name, 'array', child_id.row, child_id.column, current_item.value_type]
+                if id_node_varpart.child_num == 3:
+                    variable = [current_item.name, 'array', id_node.row, id_node.column, current_item.value_type]
                 else:
-                    print("语义错误：第{0}行, 第{1}列: 无法对数组名进行操作".format(child_id.row, child_id.column))
+                    print("语义错误：第{0}行, 第{1}列: 无法对数组名进行操作".format(id_node.row, id_node.column))
                     self.result = False
             else:
-                variable = [current_item.name, current_item.value_type, child_id.row, child_id.column, None]
+                variable = [current_item.name, current_item.value_type, id_node.row, id_node.column, None]
             # else:
             #     print('id不应该是一个过程或者函数')
             #     self.result = False
         else:
-            print("语义错误：第{0}行, 第{1}列: {2}未定义".format(child_id.row, child_id.column, child_id.value))
+            print("语义错误：第{0}行, 第{1}列: {2}未定义".format(id_node.row, id_node.column, id_node.value))
             self.result = False
         # 这里应该直接判断是否定义，如果未定义报错,直接不分析id_varpart
         # 可以直接查到id的类型, 如果id表示的是一个过程或者函数，也报错
@@ -638,17 +643,17 @@ class SemanticAnalyzer:
         current_node = self.tree.analysis_tree[node_id]
         if current_node.child_num == 3:
             se1 = self.simple_expression(current_node.child[0])
-            child_relop = self.tree.find_child_node(node_id, 1)  # 可能有一些操作
             se2 = self.simple_expression(current_node.child[2])
+            relop_node = self.tree.find_child_node(node_id, 1)  # 可能有一些操作
             if len(se1) != 0 and len(se2) != 0:
                 if se1[1] == se2[1]:
                     if se1[1] == 'integer' or se1[1] == 'real':
-                        expression = ['expression', 'boolean', child_relop.row, child_relop.column]  # 这里使用relop的 行 列
+                        expression = ['expression', 'boolean', relop_node.row, relop_node.column]  # 这里使用relop的 行 列
                     else:
-                        print('语义错误：第{0}行: 该类型无法比较'.format(child_relop.row))  # 这里使用relop的 行
+                        print('语义错误：第{0}行: 该类型无法比较'.format(relop_node.row))  # 这里使用relop的 行
                         self.result = False
                 else:
-                    print("语义错误：第{0}行: 类型不一样，无法比较".format(child_relop.row))  # 这里使用relop 的行
+                    print("语义错误：第{0}行: 类型不一样，无法比较".format(relop_node.row))  # 这里使用relop 的行
                     self.result = False
             '''
             检查两个simple_expression是否类型可以比较，
@@ -724,46 +729,51 @@ class SemanticAnalyzer:
         current_node = self.tree.analysis_tree[node_id]
         if current_node.child_num == 3:
             sub_term = self.term(current_node.child[0])
-            child_mulop = self.tree.find_child_node(node_id, 1)  # 可能要用到
+            mulop_node = self.tree.find_child_node(node_id, 1)  # 可能要用到
             sub_factor = self.factor(current_node.child[2])
             mulop_set = {'*', '/', 'div', 'mod', 'and'}
             if len(sub_factor) != 0 and len(sub_term) != 0:
                 if sub_term[1] == sub_factor[1]:
-                    if sub_term[1] == 'integer':
-                        if child_mulop.value == '*' or child_mulop.value == 'mod' or child_mulop.value == 'div' or child_mulop.value == 'and':
-                            term = ['expression', 'integer', child_mulop.row, child_mulop.column]  # 这里使用的 mulop 的行列
-                        elif child_mulop.value == '/':
-                            term = ['expression', 'real', child_mulop.row, child_mulop.column]  # 这里使用的 mulop 的行列
-                    elif sub_term[1] == 'real':
-                        if child_mulop.value == '*' or child_mulop.value == '/':
-                            term = ['expression', 'real', child_mulop.row, child_mulop.column]  # 这里使用的 mulop 的行列
+                    if sub_term[1] == "integer":
+                        if mulop_node.value == '/':
+                            term = ["expression", "real", mulop_node.row, mulop_node.column]  # 这里使用的 mulop 的行列
+                        elif mulop_node.value == '*' or mulop_node.value == 'div' or mulop_node == 'mod':
+                            term = ["expression", "integer", mulop_node.row, mulop_node.column]  # 这里使用的 mulop 的行列
                         else:
-                            print('语义错误：第{0}行: 该类型不能进行mulop'.format(child_mulop.row))
+                            print('语义错误：第{0}行: integer类型不能进行and运算'.format(mulop_node.row))
                             self.result = False
-                    elif sub_term[1] == 'boolean':
-                        if child_mulop.value == 'and':
-                            term = ['expression', 'boolean', child_mulop.row, child_mulop.column]  # 这里使用的 mulop 的行列
+                    elif sub_term[1] == "real":
+                        if mulop_node.value == '*' or mulop_node.value == '/':
+                            term = ["expression", "real", mulop_node.row, mulop_node.column]  # 这里使用的 mulop 的行列
                         else:
-                            print('语义错误：第{0}行: 该类型不能进行mulop'.format(child_mulop.row))
+                            print('语义错误：第{0}行: real类型不能进行{1}运算'.format(mulop_node.row, mulop_node.value))
+                            self.result = False
+                    elif sub_term[1] == "boolean":
+                        if mulop_node.value == 'and':
+                            term = ["expression", "boolean", mulop_node.row, mulop_node.column]  # 这里使用的 mulop 的行列
+                        else:
+                            print('语义错误：第{0}行: boolean类型不能进行{1}运算'.format(mulop_node.row, mulop_node.value))
                             self.result = False
                     else:
-                        print('语义错误：第{0}行: 该类型不能进行mulop'.format(child_mulop.row))
+                        print('语义错误：第{0}行: char类型不能进行{1}运算'.format(mulop_node.row, mulop_node.value))
                         self.result = False
                 else:
                     '''
                     判断是否能够做运算。
                     如果可能，则要做强制类型转换，例如int转real
                     '''
-                    if (sub_term[1] == 'integer' and sub_factor[1] == 'real') or (
-                            sub_term[1] == 'real' and sub_factor[1] == 'integer'):
-                        term = ['expression', 'real', child_mulop.row, child_mulop.column]  # 这里使用的 mulop 的行列
+                    if (sub_term[1] == "integer" and sub_factor[1] == "real") or \
+                            (sub_term[1] == "real" and sub_factor[1] == "integer"):
+                        if mulop_node.value == '*' or mulop_node.value == '/':
+                            term = ["expression", "real", mulop_node.row, mulop_node.column]  # 这里使用的 mulop 的行列
+                        else:
+                            print('语义错误：第{0}行: 该类型不能进行{1}运算'.format(mulop_node.row, mulop_node.value))
+                            self.result = False
                     else:
-                        print('语义错误：第{0}行: 该类型不能进行mulop'.format(child_mulop.row))
+                        print('语义错误：第{0}行: 该类型不能进行{1}运算'.format(mulop_node.row, mulop_node.value))
                         self.result = False
         elif current_node.child_num == 1:
             term = self.factor(current_node.child[0])
-        else:
-            pass  # 可能需要错误处理
         return term
 
     def factor(self, node_id):
@@ -780,31 +790,20 @@ class SemanticAnalyzer:
         factor = []
         current_node = self.tree.analysis_tree[node_id]
         if current_node.child_num == 1:
-            child = self.tree.find_child_node(node_id, 0)
-            if child.token == 'num':
-                if type(child.value) == type(1):
-                    child_type = 'integer'
-                elif type(child.value) == type(1.0):
-                    child_type = 'real'
-                elif type(child.value) == type('1'):
-                    child_type = 'char'
-                elif type(child.value) == type(True):
-                    child_type = 'boolean'
-                else:
-                    print('这个num啊，不是四个基本类型之一')
-                    return factor  # 报错
-                factor = ['expression', child_type, child.row, child.column]
-            elif child.token == 'variable':
-                variable = self.variable(child.id)
+            child_node = self.tree.find_child_node(node_id, 0)
+            if child_node.token == "num":
+                if isinstance(current_node.value, int):
+                    child_type = "integer"
+                else:  # num只可能出现int、real两种类型
+                    child_type = "real"
+                factor = ["expression", child_type, child_node.row, child_node.column]
+            elif child_node.token == "variable":
+                variable = self.variable(child_node.id)
                 if len(variable) != 0:
-                    if variable[1] == 'array':
+                    if variable[1] == "array":
                         factor = [variable[0], variable[4], variable[2], variable[3]]
                     else:
                         factor = [variable[0], variable[1], variable[2], variable[3]]
-                else:
-                    pass  # 应该有错误处理
-            else:
-                pass  # 可能有错误处理
         elif current_node.child_num == 4:
             '''
             检查id是否是一个函数或者过程，是否定义
@@ -812,55 +811,51 @@ class SemanticAnalyzer:
             还要在这里进行引用行填写
             要分析expression_list的参数类型以及个数，是否符合要求
             '''
-            child_id = self.tree.find_child_node(node_id, 0)
-            result_item = self.STManager.search_symbol_table(child_id.value, self.STManager.current_table_name)
-            if result_item != None:
-                result_item.used_row.append(child_id.row)
-                if result_item.identifier_type == 'function' or result_item.identifier_type == 'procedure':
+            id_node = self.tree.find_child_node(node_id, 0)
+            result_item = self.st_manager.search_item(id_node.value, self.st_manager.current_table_name)
+            if result_item is not None:
+                result_item.used_row.append(id_node.row)  # TODO:需要将result更新回符号表
+                if result_item.identifier_type == "function" or result_item.identifier_type == "procedure":
                     expression_list = self.expression_list(current_node.child[2])
+                    args = []
                     if len(expression_list) != 0:
-                        args = []
-                        for item in expression_list:
-                            args.append(item[1])
-                        return_type = self.STManager.complare_args(child_id.value, args)
-                        if return_type == False:
-                            print("语义错误：第{0}行, 第{1}列: 参数值不匹配".format(child_id.row, child_id.column))  # 在id行报错
-                            self.result = False
-                        else:
-                            factor = ['expression', return_type, child_id.row, child_id.column]  # 行，列是 id的行列
+                        for expression in expression_list:
+                            args.append(expression[1])
+                    return_type = self.st_manager.complare_args(id_node.value, args)  # TODO:comolare_args函数未完成
+                    if not return_type:
+                        print("语义错误：第{0}行, 第{1}列: 参数值不匹配".format(id_node.row, id_node.column))  # 在id行报错
+                        self.result = False
+                    else:
+                        factor = ["expression", return_type, id_node.row, id_node.column]  # 行，列是 id的行列
+
                 else:
-                    print("语义错误：第{0}行, 第{1}列: id不是一个函数或者过程".format(child_id.row, child_id.column))  # 在id行报错
+                    print("语义错误：第{0}行, 第{1}列: id不是一个函数或者过程".format(id_node.row, id_node.column))  # 在id行报错
                     self.result = False
             else:
-                print("语义错误：第{0}行, 第{1}列: id未定义".format(child_id.row, child_id.column))  # 在id行报错
+                print("语义错误：第{0}行, 第{1}列: id未定义".format(id_node.row, id_node.column))  # 在id行报错
                 self.result = False
         elif current_node.child_num == 3:
             expression = self.expression(current_node.child[1])
             if len(expression) != 0:
-                factor = ['expression', expression[1], expression[2], expression[3]]
+                factor = ["expression", expression[1], expression[2], expression[3]]
         elif current_node.child_num == 2:
-            child = self.tree.find_child_node(node_id, 0)
-            if child.token == 'not':  # 对于not的定义不是很清楚， 暂时只有boolean类型和integer类型的可以用not
+            child_node = self.tree.find_child_node(node_id, 0)
+            if child_node.token == "not":
                 sub_factor = self.factor(current_node.child[1])
                 if len(sub_factor) != 0:
-                    if sub_factor[1] == 'boolean' or sub_factor[1] == 'integer':
-                        factor = ['expression', sub_factor[1], child.row, child.column]  # row,column为 not的那一行
+                    if sub_factor[1] == "boolean" or sub_factor[1] == "integer":
+                        factor = ["expression", sub_factor[1], child_node.row, child_node.column]  # row,column为not的那一行
                     else:
-                        print('语义错误：第{0}行, 第{1}列: 该类型不能使用 not 运算'.format(child.row, child.column))
+                        print("语义错误：第{0}行, 第{1}列: {2}类型不能使用 not 运算".format(child_node.row, 
+                                                                           child_node.column, sub_factor[1]))
                         self.result = False
-            elif child.token == 'uminus':
+            elif child_node.token == "uminus":
                 sub_factor = self.factor(current_node.child[1])
                 if len(sub_factor) != 0:
-                    if sub_factor[1] == 'integer' or sub_factor[1] == 'real':
-                        factor = ['expression', sub_factor[1], child.row, child.column]  # row,column为 umibus 的那一行
+                    if sub_factor[1] == "integer" or sub_factor[1] == "real":
+                        factor = ["expression", sub_factor[1], child_node.row, child_node.column]
                     else:
-                        print("语义错误：第{0}行, 第{1}列: 该类型无法进行uminus操作".format(child.row, child.column))
+                        print("语义错误：第{0}行, 第{1}列: {2}类型无法进行uminus操作".format(child_node.row,
+                                                                            child_node.column, sub_factor[1]))
                         self.result = False
-        else:
-            pass  # 可能要进行错误处理
         return factor
-
-
-
-
-
