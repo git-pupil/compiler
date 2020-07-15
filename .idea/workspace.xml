@@ -19,7 +19,7 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="47122d0c-8838-4dda-af67-3985dd42e287" name="Default Changelist" comment="对程序体的逻辑进行了梳理，目前的程序体函数是无法使用的">
+    <list default="true" id="47122d0c-8838-4dda-af67-3985dd42e287" name="Default Changelist" comment="基本完成了term及factor函数的编写">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/semantics_analysis.py" beforeDir="false" afterPath="$PROJECT_DIR$/semantics_analysis.py" afterDir="false" />
     </list>
@@ -141,7 +141,8 @@
       <workItem from="1594514875182" duration="4631000" />
       <workItem from="1594600960295" duration="5072000" />
       <workItem from="1594607553825" duration="899000" />
-      <workItem from="1594687948476" duration="4358000" />
+      <workItem from="1594687948476" duration="4448000" />
+      <workItem from="1594774799493" duration="3477000" />
     </task>
     <task id="LOCAL-00001" summary="增加了变量声明部分的符号表建立操作">
       <created>1594260792066</created>
@@ -164,7 +165,14 @@
       <option name="project" value="LOCAL" />
       <updated>1594519681307</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="基本完成了term及factor函数的编写">
+      <created>1594692642278</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1594692642278</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -186,7 +194,8 @@
     <MESSAGE value="增加了变量声明部分的符号表建立操作" />
     <MESSAGE value="增加了过程及函数声明部分的符号表建立操作" />
     <MESSAGE value="对程序体的逻辑进行了梳理，目前的程序体函数是无法使用的" />
-    <option name="LAST_COMMIT_MESSAGE" value="对程序体的逻辑进行了梳理，目前的程序体函数是无法使用的" />
+    <MESSAGE value="基本完成了term及factor函数的编写" />
+    <option name="LAST_COMMIT_MESSAGE" value="基本完成了term及factor函数的编写" />
   </component>
   <component name="WindowStateProjectService">
     <state x="549" y="166" key="FileChooserDialogImpl" timestamp="1594448461327">

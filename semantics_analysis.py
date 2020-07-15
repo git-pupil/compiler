@@ -623,12 +623,10 @@ class SemanticAnalyzer:
         if current_node.child_num == 3:
             expression_list = self.expression_list(current_node.child[0])
             result = self.expression(current_node.child[2])
-            if len(result) != 0:
-                expression_list.append(self.expression(current_node.child[2]))
-        elif current_node.child_num == 1:
+        else:
             result = self.expression(current_node.child[0])
-            if len(result) != 0:
-                expression_list.append(self.expression(current_node.child[0]))
+        if len(result) != 0:
+            expression_list.append(self.expression(current_node.child[0]))
         return expression_list
 
     def expression(self, node_id):
@@ -642,27 +640,26 @@ class SemanticAnalyzer:
         expression = []
         current_node = self.tree.analysis_tree[node_id]
         if current_node.child_num == 3:
+            '''
+            检查两个simple_expression是否类型可以比较，
+            如果可以则返回值类型为 boolean
+            '''
             se1 = self.simple_expression(current_node.child[0])
             se2 = self.simple_expression(current_node.child[2])
             relop_node = self.tree.find_child_node(node_id, 1)  # 可能有一些操作
             if len(se1) != 0 and len(se2) != 0:
                 if se1[1] == se2[1]:
-                    if se1[1] == 'integer' or se1[1] == 'real':
-                        expression = ['expression', 'boolean', relop_node.row, relop_node.column]  # 这里使用relop的 行 列
+                    if se1[1] == "integer" or se1[1] == "real":
+                        expression = ["expression", "boolean", relop_node.row, relop_node.column]  # 这里使用relop的行列
                     else:
-                        print('语义错误：第{0}行: 该类型无法比较'.format(relop_node.row))  # 这里使用relop的 行
+                        print('语义错误：第{0}行: 类型{1}无法比较'.format(relop_node.row, se1[1]))  # 这里使用relop的行
                         self.result = False
                 else:
-                    print("语义错误：第{0}行: 类型不一样，无法比较".format(relop_node.row))  # 这里使用relop 的行
+                    print("语义错误：第{0}行: 类型同，无法比较".format(relop_node.row))  # 这里使用relop的行
                     self.result = False
-            '''
-            检查两个simple_expression是否类型可以比较，
-            如果可以则返回值类型为 boolean
-            '''
+
         elif current_node.child_num == 1:
             expression = self.simple_expression(current_node.child[0])
-        else:
-            pass  # 可能进行错误处理
         return expression
 
     def simple_expression(self, node_id):
@@ -674,48 +671,50 @@ class SemanticAnalyzer:
         """
         simple_expression = []
         current_node = self.tree.analysis_tree[node_id]
+        '''
+        判断两个是否能够addop，
+        如果能simple_expression = ['expression', type, None, None]，否则，为空
+        可能涉及到一些类型转换，例如int转real之类的
+        '''
         if current_node.child_num == 3:
             sub_simple_expressipon = self.simple_expression(current_node.child[0])
-            child_addop = self.tree.find_child_node(node_id, 1)  # 可能要用到该属性
-            # or的类型检查
+            addop_node = self.tree.find_child_node(node_id, 1)  # 可能要用到该属性
             sub_term = self.term(current_node.child[2])
             if len(sub_simple_expressipon) != 0 and len(sub_term) != 0:
                 if sub_simple_expressipon[1] == sub_term[1]:
-                    if child_addop.value != 'or':
-                        if sub_term[1] == 'integer' or sub_term[1] == 'real':
-                            simple_expression = ['expression', sub_term[1], child_addop.row,
-                                                 child_addop.column]  # 这里使用addop的行，列
+                    if addop_node.value == 'or':
+                        if sub_term[1] == "integer" or sub_term[1] == "boolean":
+                            simple_expression = ["expression", sub_term[1], addop_node.row,
+                                                 addop_node.column]  # 这里使用addop的行，列
                         else:
-                            print("语义错误：第{0}行: 类型不匹配，无法执行addop操作".format(child_addop.row))  # 这里使用addop的行
+                            print("语义错误：第{0}行: 类型不匹配，类型{1}无法执行or操作".format(
+                                addop_node.row, sub_term[1]))  # 这里使用addop的行
                             self.result = False
                     else:
-                        if sub_term[1] == 'integer' or sub_term[1] == 'boolean':
-                            simple_expression = ['expression', sub_term[1], child_addop.row,
-                                                 child_addop.column]  # 这里使用addop的行，列
+                        if sub_term[1] == "integer" or sub_term[1] == "real":
+                            simple_expression = ["expression", sub_term[1], addop_node.row,
+                                                 addop_node.column]  # 这里使用addop的行，列
                         else:
-                            print("语义错误：第{0}行: 类型不匹配，无法执行 or 操作".format(child_addop.row))  # 这里使用addop的行
+                            print("语义错误：第{0}行: 类型不匹配，类型{1}无法执行{2}操作".format(
+                                addop_node.row, sub_term[1], addop_node.value))  # 这里使用addop的行
                             self.result = False
                 else:
-                    if child_addop.value != 'or':
-                        if sub_term[1] == 'integer' and sub_simple_expressipon[1] == 'real':
-                            simple_expression = ['expression', 'real', child_addop.row, child_addop.column]
-                        elif sub_term[1] == 'real' and sub_simple_expressipon[1] == 'integer':
-                            simple_expression = ['expression', 'real', child_addop.row, child_addop.column]
+                    if addop_node.value != 'or':
+                        if sub_term[1] == "integer" and sub_simple_expressipon[1] == "real":
+                            simple_expression = ["expression", "real", addop_node.row, addop_node.column]
+                        elif sub_term[1] == "real" and sub_simple_expressipon[1] == "integer":
+                            simple_expression = ["expression", "real", addop_node.row, addop_node.column]
                         else:
-                            print("语义错误：第{0}行: 类型不匹配，无法执行addop操作".format(child_addop.row))  # 这里使用addop的行
+                            print("语义错误：第{0}行: 类型不匹配，无法执行{1}操作".format(
+                                addop_node.row, addop_node.value))  # 这里使用addop的行
                             self.result = False
                     else:
-                        print("语义错误：第{0}行: 类型不匹配，无法执行addop操作".format(child_addop.row))  # 这里使用addop的行
+                        print("语义错误：第{0}行: 类型不匹配，无法执行{1}操作".format(
+                                addop_node.row, addop_node.value))  # 这里使用addop的行
                         self.result = False
-            '''
-            判断两个是否能够addop，
-            如果能simple_expression = ['expression', type, None, None]，否则，为空
-            可能涉及到一些类型转换，例如int转real之类的
-            '''
+
         elif current_node.child_num == 1:
             simple_expression = self.term(current_node.child[0])
-        else:
-            pass  # 可能进行错误处理
         return simple_expression
 
     def term(self, node_id):
