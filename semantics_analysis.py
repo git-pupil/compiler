@@ -3,7 +3,7 @@ from analysis_tree import *
 
 
 class SemanticAnalyzer:
-    def __init__(self, analysis_tree=AnalysisTree(), st_manager=st_manager()):
+    def __init__(self, analysis_tree=AnalysisTree(), st_manager=STManager()):
         self.result = True  # 分析结果，false or true
         self.tree = analysis_tree  # 分析树
         self.st_manager = st_manager  # 符号表操作
