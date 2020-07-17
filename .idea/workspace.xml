@@ -19,7 +19,7 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="47122d0c-8838-4dda-af67-3985dd42e287" name="Default Changelist" comment="基本完成了有关expression函数的实现">
+    <list default="true" id="47122d0c-8838-4dda-af67-3985dd42e287" name="Default Changelist" comment="基本完成了除条件判断之外的其他函数">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/semantics_analysis.py" beforeDir="false" afterPath="$PROJECT_DIR$/semantics_analysis.py" afterDir="false" />
     </list>
@@ -147,7 +147,9 @@
       <workItem from="1594687948476" duration="4448000" />
       <workItem from="1594774799493" duration="3558000" />
       <workItem from="1594860530871" duration="2492000" />
-      <workItem from="1594863057823" duration="1518000" />
+      <workItem from="1594863057823" duration="1589000" />
+      <workItem from="1594865032102" duration="4000" />
+      <workItem from="1594947517201" duration="2570000" />
     </task>
     <task id="LOCAL-00001" summary="增加了变量声明部分的符号表建立操作">
       <created>1594260792066</created>
@@ -184,7 +186,14 @@
       <option name="project" value="LOCAL" />
       <updated>1594780498387</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <task id="LOCAL-00006" summary="基本完成了除条件判断之外的其他函数">
+      <created>1594864603991</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1594864603991</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -208,7 +217,8 @@
     <MESSAGE value="对程序体的逻辑进行了梳理，目前的程序体函数是无法使用的" />
     <MESSAGE value="基本完成了term及factor函数的编写" />
     <MESSAGE value="基本完成了有关expression函数的实现" />
-    <option name="LAST_COMMIT_MESSAGE" value="基本完成了有关expression函数的实现" />
+    <MESSAGE value="基本完成了除条件判断之外的其他函数" />
+    <option name="LAST_COMMIT_MESSAGE" value="基本完成了除条件判断之外的其他函数" />
   </component>
   <component name="WindowStateProjectService">
     <state x="549" y="166" key="FileChooserDialogImpl" timestamp="1594448461327">
