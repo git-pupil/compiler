@@ -40,10 +40,10 @@ class SemanticAnalyzer:
         current_node = self.tree.analysis_tree[node_id]
         parameter_list = []
         if current_node.child_num == 2:
-            self.st_manager.make_table('main', parameter_list, False, None)
+            self.st_manager.make_table("main", parameter_list, False, None)
         elif current_node.child_num == 5:
             parameter_list = self.idlist(current_node.child[3])
-            self.st_manager.make_table('main', parameter_list, False, None)
+            self.st_manager.make_table("main", parameter_list, False, None)
         else:
             self.result = False
 
@@ -407,7 +407,7 @@ class SemanticAnalyzer:
 
     def statement(self, node_id):
         """
-        statement → variable assignop expression
+        statement → variable assignop expression {进行函数返回值检查}
         statement → procedure_call
         statement → compound_statement
         statement → if expression then statement else_part
@@ -434,7 +434,7 @@ class SemanticAnalyzer:
                 if variable[1] == "array":
                     variable[1] = variable[4]
                 if variable[1] != expression[1]:
-                    print('语义错误：第{0}行, 第{1}列: 变量类型不匹配，无法赋值'.format(variable[2], variable[3]))
+                    print('语义错误：第{0}行, 第{1}列: 变量或函数类型不匹配，无法赋值'.format(variable[2], variable[3]))
                     self.result = False
             else:
                 print('语义错误：第{0}行, 第{1}列: 变量未定义'.format(variable[2], variable[3]))
@@ -479,14 +479,16 @@ class SemanticAnalyzer:
 
         elif current_node.child_num == 8:  # statement → for id assignop expression to expression do statement
             id_node = self.tree.find_child_node(node_id, 1)
-            child_assignop = self.tree.find_child_node(node_id, 2)
             return_type1 = self.expression(current_node.child[3])  # 第一个expression
             return_type2 = self.expression(current_node.child[5])  # 第二个expression
-            result_item = self.st_manager.search_symbol_table(id_node.value, self.st_manager.current_table_name)
+            result_item = self.st_manager.search_item(id_node.value, self.st_manager.current_table_name)
             if result_item is None:
                 print("语义错误：第{0}行, 第{1}列: 变量{2}未定义".format(id_node.row, id_node.column, id_node.value))
                 self.result = False
-            if result_item is not None and len(return_type1) != 0 and len(return_type2) != 0:
+            elif result_item.identifier_type != 'var':
+                print("语义错误：第{0}行, 第{1}列: 不能给非变量{2}赋值".format(id_node.row, id_node.column, id_node.value))
+                self.result = False
+            elif len(return_type1) != 0 and len(return_type2) != 0:
                 result_item.used_row.append(id_node.row)  # TODO:缺少存入步骤
                 if result_item.value_type == "integer" and return_type1[1] == "integer" \
                         and return_type2[1] == "integer":
@@ -522,29 +524,25 @@ class SemanticAnalyzer:
         variable = []
         id_node = self.tree.find_child_node(node_id, 0)
         id_varpart_node = self.tree.find_child_node(node_id, 1)
-        current_item = self.st_manager.search_symbol_table(id_node.value,
-                                                           self.st_manager.current_table_name)  # TODO:缺少保存过程
+        current_item = self.st_manager.search_item(id_node.value,
+                                                   self.st_manager.current_table_name)
         if current_item is not None:
-            current_item.used_row.append(id_node.row)
-            # identifier_type = {'function', 'procedure', 'program'}
-            # if current_item.identifier_type not in identifier_type:
+            current_item.used_row.append(id_node.row)  # TODO:缺少保存过程
             self.id_varpart(current_node.child[1])
-            if current_item.identifier_type == 'array':
+            if current_item.identifier_type == "array":
                 if id_varpart_node.child_num == 3:
-                    variable = [current_item.name, 'array', id_node.row, id_node.column, current_item.value_type]
+                    variable = [current_item.name, "array", id_node.row, id_node.column, current_item.value_type]
                 else:
                     print("语义错误：第{0}行, 第{1}列: 无法对数组名进行操作".format(id_node.row, id_node.column))
                     self.result = False
-            else:
+            elif current_item.identifier_type == "var" or current_item.identifier_type == "function":
                 variable = [current_item.name, current_item.value_type, id_node.row, id_node.column, None]
-            # else:
-            #     print('id不应该是一个过程或者函数')
-            #     self.result = False
+            else:
+                print("语义错误：第{0}行, 第{1}列: 无法对非变量类型进行操作".format(id_node.row, id_node.column))
+                self.result = False
         else:
             print("语义错误：第{0}行, 第{1}列: {2}未定义".format(id_node.row, id_node.column, id_node.value))
             self.result = False
-        # 这里应该直接判断是否定义，如果未定义报错,直接不分析id_varpart
-        # 可以直接查到id的类型, 如果id表示的是一个过程或者函数，也报错
         return variable
 
     def id_varpart(self, node_id):
@@ -569,7 +567,7 @@ class SemanticAnalyzer:
         """
         current_node = self.tree.analysis_tree[node_id]
         id_node = self.tree.find_child_node(node_id, 0)
-        result_item = self.st_manager.search_symbol_table(id_node.value, self.st_manager.current_table_name)
+        result_item = self.st_manager.search_item(id_node.value, self.st_manager.current_table_name)
         if result_item is None:
             print('语义错误：第{0}行, 第{1}列: {2}未定义'.format(id_node.row, id_node.column, id_node.value))
             self.result = False
@@ -823,7 +821,6 @@ class SemanticAnalyzer:
                         self.result = False
                     else:
                         factor = ["expression", return_type, id_node.row, id_node.column]  # 行，列是 id的行列
-
                 else:
                     print("语义错误：第{0}行, 第{1}列: id不是一个函数或者过程".format(id_node.row, id_node.column))  # 在id行报错
                     self.result = False
