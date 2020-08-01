@@ -19,8 +19,9 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="47122d0c-8838-4dda-af67-3985dd42e287" name="Default Changelist" comment="修改了符号表引入的错误">
+    <list default="true" id="47122d0c-8838-4dda-af67-3985dd42e287" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/symbol_table.py" beforeDir="false" afterPath="$PROJECT_DIR$/symbol_table.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -159,7 +160,8 @@
       <workItem from="1594865032102" duration="4000" />
       <workItem from="1594947517201" duration="2862000" />
       <workItem from="1595052363719" duration="3400000" />
-      <workItem from="1596125499234" duration="6412000" />
+      <workItem from="1596125499234" duration="7297000" />
+      <workItem from="1596287982044" duration="937000" />
     </task>
     <task id="LOCAL-00001" summary="增加了变量声明部分的符号表建立操作">
       <created>1594260792066</created>
@@ -224,7 +226,14 @@
       <option name="project" value="LOCAL" />
       <updated>1596132889708</updated>
     </task>
-    <option name="localTasksCounter" value="10" />
+    <task id="LOCAL-00010" summary="修改了符号表">
+      <created>1596133105917</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1596133105917</updated>
+    </task>
+    <option name="localTasksCounter" value="11" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -255,7 +264,8 @@
     <MESSAGE value="基本完成了除条件判断之外的其他函数" />
     <MESSAGE value="基本完成了所有函数，后续会进行检查及补充未进行的语义错误分析" />
     <MESSAGE value="修改了符号表引入的错误" />
-    <option name="LAST_COMMIT_MESSAGE" value="修改了符号表引入的错误" />
+    <MESSAGE value="修改了符号表" />
+    <option name="LAST_COMMIT_MESSAGE" value="修改了符号表" />
   </component>
   <component name="WindowStateProjectService">
     <state x="549" y="166" key="FileChooserDialogImpl" timestamp="1594448461327">

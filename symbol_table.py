@@ -1,3 +1,4 @@
+import operator
 class Parameter:
     """
     符号表或者表项中的形式参数的内容，位置及其传递方式
@@ -16,9 +17,12 @@ class Item:
     """
     符号表中的表项
     """
-
     def __init__(self, name, identifier_type, value_type, value,
-                 dimension=None, parameter_list=[], declare_row=None, used_row=[]):
+                 dimension=None, parameter_list=None, declare_row=None, used_row=None):
+        if parameter_list is None:
+            parameter_list = []
+        if used_row is None:
+            used_row = []
         self.name = name  # 标识符名称
         self.identifier_type = identifier_type  # 标识符类型 CONST VAR ARRAY ADDR PROGRAM FUNCTION PROCEDURE
         self.value_type = value_type  # 常量，变量：值的类型  INT,REAL,CHAR, boolean
@@ -36,9 +40,12 @@ class SymbolTable:
     符号表主体
     parent父表中的索引如何找到没有确定(用表名找)
     """
-
-    def __init__(self, name='', parameter_list=[], item_list=[], is_func=False,
+    def __init__(self, name='', parameter_list=None, item_list=None, is_func=False,
                  is_valid=False, return_type=None):
+        if item_list is None:
+            item_list = []
+        if parameter_list is None:
+            parameter_list = []
         self.name = name  # 符号表名字，应该是唯一的
         self.parameter_list = parameter_list  # 形参列表
         self.item_list = item_list  # 符号表条目
@@ -46,13 +53,15 @@ class SymbolTable:
         self.is_valid = is_valid  # 表是否有效，用于定位与重定位
         self.return_type = return_type  # 返回值类型
 
-
 class STManager:
     """
     符号表管理类
     """
     all_symbol_table = {}  # {'名称'：SymbolTable, }
     current_table_name = None  # 当前所在的表
+
+    def __init__(self):
+        self.all_symbol_tabel = None
 
     def make_table(self, name, parameter_list, is_func, return_type):
         """
@@ -172,137 +181,140 @@ class STManager:
         self.all_symbol_table[self.current_table_name].is_valid = False
         self.current_table_name = 'main'
 
-
-    def complare_args(self, func_name='', parameter_list=[]):
-      """
-      比较函数的实参个数和类型与符号表中的定义是否一致；
-        Args:
-          func_name: 比较的函数名(str)
-          parameter_list: 该函数的实参列表，每一项是实参的类型,['int','char']
-        Returns:
-          func_type: 该函数的返回值类型(int,bool,None)
-          False: 比较失败或符号表中不存在这样的函数名
-      """
-      parameter_num = len(parameter_list)  # 实参个数
-      if(func_name in self.all_symbol_tabel.keys()):  # 要比较的函数名在符号表中
-          if( self.getpnum(func_name) == parameter_num and   # 实参个数与形参个数一致
-              self.checkptype(func_name, parameter_list) == True):  # 实参类型与形参类型一致
-              return self.getfunc_type(func_name)  # 返回函数的返回值类型:None,int,bool...
-          else:  # 否则视为类型错误
-              return False
-      else:  # 要比较的函数名不在符号表中
-          return False
-
-    def getpnum(self, func_name):
-      """
-      个数判断
-      从符号表中根据func_name提取形参个数
-      """
-       pnum = len(self.all_symbol_tabel[func_name].parameter_list) #获取到形参的个数
-       return pnum
-
     def getfunc_type(self, func_name):
-      """
-      从符号表根据func_name提取函数的返回值类型
-      """
-      func_type = self.all_symbol_tabel[func_name].return_type
-      return func_type
+        """
+        从符号表根据func_name提取函数的返回值类型
+        """
+        func_type = self.all_symbol_tabel[func_name].return_type
+        return func_type
 
     def checkptype(self, func_name, argument_type_list):
-         """
-         类型判断
-         根据函数名和实参类型列表，
-            与符号表进行比较
-            列表形如(int, char, real)
-         """
-          parameter_type_list = []
-          for x in self.all_symbol_tabel[func_name].parameter_list:  # 获取形参类型列表
-              parameter_type_list.append(x.type)
-          result = operator.eq(parameter_type_list, argument_type_list)  # 比较
-          return result
+        """
+        类型判断
+        根据函数名和实参类型列表，
+           与符号表进行比较
+           列表形如(int, char, real)
+        """
+        parameter_type_list = []
+        for x in self.all_symbol_tabel[func_name].parameter_list:  # 获取形参类型列表
+            parameter_type_list.append(x.type)
+        result = operator.eq(parameter_type_list, argument_type_list)  # 比较
+        return result
+
+    def complare_args(self, func_name='', parameter_list=None):
+        """
+        比较函数的实参个数和类型与符号表中的定义是否一致；
+          Args:
+            func_name: 比较的函数名(str)
+            parameter_list: 该函数的实参列表，每一项是实参的类型,['int','char']
+          Returns:
+            func_type: 该函数的返回值类型(int,bool,None)
+            False: 比较失败或符号表中不存在这样的函数名
+        """
+        if parameter_list is None:
+            parameter_list = []
+        parameter_num = len(parameter_list)  # 实参个数
+        if (func_name in self.all_symbol_tabel.keys()):  # 要比较的函数名在符号表中
+            if (self.getpnum(func_name) == parameter_num and  # 实参个数与形参个数一致
+                    self.checkptype(func_name, parameter_list) == True):  # 实参类型与形参类型一致
+                return self.getfunc_type(func_name)  # 返回函数的返回值类型:None,int,bool...
+            else:  # 否则视为类型错误
+                return False
+        else:  # 要比较的函数名不在符号表中
+            return False
+
+    def getpnum(self, func_name):
+        """
+        个数判断
+        从符号表中根据func_name提取形参个数
+        """
+        pnum = len(self.all_symbol_tabel[func_name].parameter_list)  # 获取到形参的个数
+        return pnum
+
 
     def is_addr(self, item_name, table_name):
-            
-         """
-         判断item_name是引用传递还是按值传递
-         返回：
-            true 传地址；
-            false 传值
-         """
-         if table_name in self.all_symbol_tabel.keys():
-         arguments = self.all_symbol_tabel[table_name].parameter_list
-         for item in arguments:
-             if item_name == item.name:
-                 return item.vary
-         else:
-             return False
-         else:
-         print('这个函数未声明')
-         return None
-            
-
-    def get_array_arrange(self, array_name, table_name):
-            
-         """
-         获取数组上下限
-            返回：[(下限, 上限), ]
-         """
-        result_item = self.search_item(array_name, table_name)
-       if result_item == None:
-           print('oooops，未定义')
-           return None
-       elif result_item.identifier_type != 'array':
-           print('你找的不是数组啊？！')
-           return None
-       else:
-           return result_item.parameter_list
-
-
-    def get_variable_type(self, item_name, table_name):
-            
-          """
-          获取变量的类型
-          返回: 'integer|boolean|char|real'
-           """
-          result_item = self.search_item(item_name, table_name)
-          if result_item == None:
-              print('oooops，未定义')
-              return None
-          else:
-              return result_item.value_type  #返回变量的类型
-
-    def is_func(self, item_name):
-            """
-            判断是否是一个函数
-            返回：true or false
-            """
-        result_item = self.search_item(item_name, 'main')
-        if result_item == None:
-            return False
-        else:
-            if result_item.identifier_type == 'function':
-                return True
+        """
+        判断item_name是引用传递还是按值传递
+        返回：
+           true 传地址；
+           false 传值
+        """
+        if table_name in self.all_symbol_tabel.keys():
+            arguments = self.all_symbol_tabel[table_name].parameter_list
+        for item in arguments:
+            if item_name == item.name:
+                return item.vary
             else:
                 return False
+        else:
+            print('这个函数未声明')
+            return None
 
 
-    def get_args(self, table_name):
-            """
-            返回对应的参数列表
-            """
-        if table_name in self.all_symbol_tabel.keys():
-            return [item.vary for item in self.all_symbol_tabel[table_name].parameter_list]
+
+def get_array_arrange(self, array_name, table_name):
+    """
+    获取数组上下限
+       返回：[(下限, 上限), ]
+    """
+    result_item = self.search_item(array_name, table_name)
+    if result_item == None:
+        print('oooops，未定义')
         return None
+    elif result_item.identifier_type != 'array':
+        print('你找的不是数组啊？！')
+        return None
+    else:
+        return result_item.parameter_list
 
-    def output_table_item(self):
-     '''   输出所有表的表项'''
-      for symboltable in self.all_symbol_tabel.values():
-             print('-----------------------------表名:{}----------------------------'.format(symboltable.name))
-             if symboltable.name != 'main':
-                 for item in symboltable.parameter_list:
-                     print('参数名：{0}，类型：{1}, 是否按地址传递：{2}'.format(item.name, item.type, (not item.type)))
-             print('[name]      [identifier_type]  [value_type] [value] [declare_row] [used_row] [demision]')
-             if symboltable.item_list!= []:
-                 for table_item in symboltable.item_list:
-                     print(table_item.name, table_item.identifier_type,table_item.value_type, table_item.value, table_item.declare_row,table_item.used_row, sep='  ',end ='  ')
-                     print(table_item.demension)
+
+def get_variable_type(self, item_name, table_name):
+    """
+    获取变量的类型
+    返回: 'integer|boolean|char|real'
+     """
+    result_item = self.search_item(item_name, table_name)
+    if result_item == None:
+        print('oooops，未定义')
+        return None
+    else:
+        return result_item.value_type  # 返回变量的类型
+
+
+def is_func(self, item_name):
+    """
+    判断是否是一个函数
+    返回：true or false
+    """
+    result_item = self.search_item(item_name, 'main')
+    if result_item == None:
+        return False
+    else:
+        if result_item.identifier_type == 'function':
+            return True
+        else:
+            return False
+
+
+def get_args(self, table_name):
+    """
+    返回对应的参数列表
+    """
+    if table_name in self.all_symbol_tabel.keys():
+        return [item.vary for item in self.all_symbol_tabel[table_name].parameter_list]
+    return None
+
+
+def output_table_item(self):
+    """输出所有表的表项"""
+    for symboltable in self.all_symbol_tabel.values():
+        print('-----------------------------表名:{}----------------------------'.format(symboltable.name))
+        if symboltable.name != 'main':
+            for item in symboltable.parameter_list:
+                print('参数名：{0}，类型：{1}, 是否按地址传递：{2}'.format(item.name, item.type, (not item.type)))
+        print('[name]      [identifier_type]  [value_type] [value] [declare_row] [used_row] [demision]')
+        if symboltable.item_list != []:
+            for table_item in symboltable.item_list:
+                print(table_item.name, table_item.identifier_type, table_item.value_type, table_item.value,
+                      table_item.declare_row, table_item.used_row, sep='  ', end='  ')
+                print(table_item.demension)
