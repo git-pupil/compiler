@@ -1,0 +1,14 @@
+program example(input,output);
+    const test = +111 ;
+    var x,y: integer;
+    z, w : array [ 10..20, 30..40 ] of integer ;
+    r, q : array [ 0..9, 30..40 ] of boolean ;
+    function gcd(a,b:integer):integer;
+        begin
+            if b=0 then gcd:=a
+            else gcd:=gcd(b, a mod b)
+        end;
+    begin
+        read(x, y);
+        write(gcd(x, y))
+    end.

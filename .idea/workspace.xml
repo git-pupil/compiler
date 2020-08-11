@@ -20,10 +20,33 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="47122d0c-8838-4dda-af67-3985dd42e287" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/grammar_analyse.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/grammar_tree.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/test/example3.pas" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/test/gcd.pas" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/test/grammar_right_1.pas" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/test/grammar_right_2.pas" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/test/quicksort.pas" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/test/right_example.pas" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/test/semantics_err1.pas" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/test/semantics_err2.pas" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/test/test_array.pas" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/test/test_const_declarations.pas" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/test/test_for.pas" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/test/test_program.pas" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/test/test_subprogram_declarations.pas" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/test/test_var_addr.pas" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/test/test_var_declarations.pas" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/test/word_analyse_test1" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/test/word_analyse_test2" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/test/word_analyse_test3" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/wordanalyse.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/analysis_tree.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/semantics_analysis.py" beforeDir="false" afterPath="$PROJECT_DIR$/semantics_analysis.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/symbol_table.py" beforeDir="false" afterPath="$PROJECT_DIR$/symbol_table.py" afterDir="false" />
     </list>
-    <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -53,16 +76,16 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
-  <component name="HighlightingSettingsPerFile">
-    <setting file="file://$PROJECT_DIR$/semantics_analysis.py" root0="FORCE_HIGHLIGHTING" />
-  </component>
   <component name="ProjectId" id="1cRDaG6q9P9KtWvQ3UsSDJj1bzt" />
-  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true">
+    <ConfirmationsSetting value="2" id="Add" />
+  </component>
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
   <component name="PropertiesComponent">
+    <property name="ASKED_ADD_EXTERNAL_FILES" value="true" />
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
@@ -79,22 +102,11 @@
       <recent name="E:\PycharmProjects\compiler\venv\Include" />
     </key>
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="D:\Project\PycharmProjects\semantics-analysis" />
       <recent name="E:\PycharmProjects\compiler" />
     </key>
   </component>
-  <component name="RunDashboard">
-    <option name="ruleStates">
-      <list>
-        <RuleState>
-          <option name="name" value="ConfigurationTypeDashboardGroupingRule" />
-        </RuleState>
-        <RuleState>
-          <option name="name" value="StatusDashboardGroupingRule" />
-        </RuleState>
-      </list>
-    </option>
-  </component>
-  <component name="RunManager">
+  <component name="RunManager" selected="Python.main">
     <configuration name="Sematic" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <module name="compiler" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -117,6 +129,33 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
+    <configuration name="main" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="compiler" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/main.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Python.main" />
+      </list>
+    </recent_temporary>
   </component>
   <component name="SvnConfiguration">
     <configuration />
@@ -162,6 +201,17 @@
       <workItem from="1595052363719" duration="3400000" />
       <workItem from="1596125499234" duration="7297000" />
       <workItem from="1596287982044" duration="937000" />
+      <workItem from="1596450211113" duration="3272000" />
+      <workItem from="1596627942763" duration="606000" />
+      <workItem from="1597019184654" duration="313000" />
+      <workItem from="1597019535321" duration="2490000" />
+      <workItem from="1597024290596" duration="703000" />
+      <workItem from="1597045650413" duration="498000" />
+      <workItem from="1597062558350" duration="2480000" />
+      <workItem from="1597065216193" duration="84000" />
+      <workItem from="1597065701408" duration="2883000" />
+      <workItem from="1597106117068" duration="21000" />
+      <workItem from="1597109134585" duration="311000" />
     </task>
     <task id="LOCAL-00001" summary="增加了变量声明部分的符号表建立操作">
       <created>1594260792066</created>
@@ -237,7 +287,7 @@
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
-    <option name="version" value="1" />
+    <option name="version" value="2" />
   </component>
   <component name="UnknownFeatures">
     <option featureType="com.intellij.fileTypeFactory" implementationName="*.py" />
@@ -247,15 +297,15 @@
       <map>
         <entry key="MAIN">
           <value>
-            <State>
-              <option name="COLUMN_ORDER" />
-            </State>
+            <State />
           </value>
         </entry>
       </map>
     </option>
+    <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="VcsManagerConfiguration">
+    <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
     <MESSAGE value="增加了变量声明部分的符号表建立操作" />
     <MESSAGE value="增加了过程及函数声明部分的符号表建立操作" />
     <MESSAGE value="对程序体的逻辑进行了梳理，目前的程序体函数是无法使用的" />
@@ -268,10 +318,35 @@
     <option name="LAST_COMMIT_MESSAGE" value="修改了符号表" />
   </component>
   <component name="WindowStateProjectService">
-    <state x="549" y="166" key="FileChooserDialogImpl" timestamp="1594448461327">
-      <screen x="0" y="0" width="1536" height="824" />
+    <state x="561" y="291" key="#Scopes" timestamp="1596453161326">
+      <screen x="0" y="0" width="1536" height="864" />
+    </state>
+    <state x="561" y="291" key="#Scopes/0.0.1536.864@0.0.1536.864" timestamp="1596453161326" />
+    <state x="223" y="87" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1597109341276">
+      <screen x="0" y="0" width="1536" height="864" />
+    </state>
+    <state x="223" y="87" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1536.864@0.0.1536.864" timestamp="1597109341276" />
+    <state x="549" y="174" key="FileChooserDialogImpl" timestamp="1597106141102">
+      <screen x="0" y="0" width="1536" height="864" />
     </state>
     <state x="549" y="166" key="FileChooserDialogImpl/0.0.1536.824@0.0.1536.824" timestamp="1594448461327" />
+    <state x="549" y="174" key="FileChooserDialogImpl/0.0.1536.864@0.0.1536.864" timestamp="1597106141102" />
+    <state width="1493" height="347" key="GridCell.Tab.0.bottom" timestamp="1597109470058">
+      <screen x="0" y="0" width="1536" height="864" />
+    </state>
+    <state width="1493" height="347" key="GridCell.Tab.0.bottom/0.0.1536.864@0.0.1536.864" timestamp="1597109470058" />
+    <state width="1493" height="347" key="GridCell.Tab.0.center" timestamp="1597109470058">
+      <screen x="0" y="0" width="1536" height="864" />
+    </state>
+    <state width="1493" height="347" key="GridCell.Tab.0.center/0.0.1536.864@0.0.1536.864" timestamp="1597109470058" />
+    <state width="1493" height="347" key="GridCell.Tab.0.left" timestamp="1597109470058">
+      <screen x="0" y="0" width="1536" height="864" />
+    </state>
+    <state width="1493" height="347" key="GridCell.Tab.0.left/0.0.1536.864@0.0.1536.864" timestamp="1597109470058" />
+    <state width="1493" height="347" key="GridCell.Tab.0.right" timestamp="1597109470058">
+      <screen x="0" y="0" width="1536" height="864" />
+    </state>
+    <state width="1493" height="347" key="GridCell.Tab.0.right/0.0.1536.864@0.0.1536.864" timestamp="1597109470058" />
     <state x="387" y="157" width="996" height="707" key="SettingsEditor" timestamp="1594863128496">
       <screen x="0" y="0" width="1536" height="864" />
     </state>
@@ -281,13 +356,20 @@
       <screen x="0" y="0" width="1536" height="864" />
     </state>
     <state width="498" height="446" key="SwitcherDM/0.0.1536.864@0.0.1536.864" timestamp="1595054185821" />
-    <state x="211" y="395" width="409" height="202" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1594688412055">
+    <state x="211" y="395" width="409" height="202" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1597019688085">
       <screen x="0" y="0" width="1536" height="864" />
     </state>
-    <state x="211" y="395" width="409" height="202" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.0.1536.864@0.0.1536.864" timestamp="1594688412055" />
-    <state x="565" y="479" width="672" height="520" key="search.everywhere.popup" timestamp="1594862867600">
+    <state x="211" y="395" width="409" height="202" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.0.1536.864@0.0.1536.864" timestamp="1597019688085" />
+    <state x="718" y="117" width="746" height="843" key="dock-window-1" timestamp="1597064872557">
       <screen x="0" y="0" width="1536" height="864" />
     </state>
-    <state x="565" y="479" width="672" height="520" key="search.everywhere.popup/0.0.1536.864@0.0.1536.864" timestamp="1594862867600" />
+    <state x="718" y="117" width="746" height="843" key="dock-window-1/0.0.1536.864@0.0.1536.864" timestamp="1597064872557" />
+    <state x="565" y="479" width="672" height="520" key="search.everywhere.popup" timestamp="1597109292244">
+      <screen x="0" y="0" width="1536" height="864" />
+    </state>
+    <state x="565" y="479" width="672" height="520" key="search.everywhere.popup/0.0.1536.864@0.0.1536.864" timestamp="1597109292244" />
+  </component>
+  <component name="com.intellij.coverage.CoverageDataManagerImpl">
+    <SUITE FILE_PATH="coverage/semantics_analysis$main.coverage" NAME="main Coverage Results" MODIFIED="1597109461255" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
   </component>
 </project>

@@ -1,32 +1,34 @@
 from symbol_table import *
-from analysis_tree import *
+from grammar_tree import *
 
 
 class SemanticAnalyzer:
-    def __init__(self, analysis_tree=AnalysisTree(), st_manager=STManager()):
+    def __init__(self, grammar_tree, st_manager=STManager()):
         self.result = True  # 分析结果，false or true
-        self.tree = analysis_tree  # 分析树
+        self.tree = grammar_tree  # 分析树
         self.st_manager = st_manager  # 符号表操作
 
     """
         语法分析过程中分析过的内容在此不做检查
     """
 
-    def S(self):
-        """
-        S -> programstruct
-        不需要进行检查
-        """
-        current_node_id = self.tree.find_child_node(0, 0).id
-        current_node = self.tree.analysis_tree[current_node_id]  # 找到当前节点
-        self.programstruct(current_node.child[0])
+    # def S(self):
+    #     """
+    #     S -> programstruct
+    #     不需要进行检查
+    #     """
+    #     current_node_id = self.tree.find_child_node(0, 0).id
+    #     current_node = self.tree.grammar_tree[current_node_id]  # 找到当前节点
+    #     self.programstruct(current_node.child[0])
 
-    def programstruct(self, node_id):
+    def programstruct(self):
         """
         programstruct -> program_head ; program_body .
         不需要进行检查
         """
-        current_node = self.tree.analysis_tree[node_id]
+        # current_node = self.tree.grammar_tree[node_id]
+        current_node_id = self.tree.grammar_tree[0].id
+        current_node = self.tree.grammar_tree[current_node_id]  # 找到当前节点
         self.program_head(current_node.child[0])
         self.program_body(current_node.child[2])
 
@@ -37,11 +39,11 @@ class SemanticAnalyzer:
         program_head → program id{make_table('main',False,None,[])}
         建表
         """
-        current_node = self.tree.analysis_tree[node_id]
+        current_node = self.tree.grammar_tree[node_id]
         parameter_list = []
-        if current_node.child_num == 2:
+        if len(current_node.child) == 2:
             self.st_manager.make_table("main", parameter_list, False, None)
-        elif current_node.child_num == 5:
+        elif len(current_node.child) == 5:
             parameter_list = self.idlist(current_node.child[3])
             self.st_manager.make_table("main", parameter_list, False, None)
         else:
@@ -52,7 +54,7 @@ class SemanticAnalyzer:
         program_body → const_declarations var_declarations subprogram_declarations compound_statement
         不需要检查
         """
-        current_node = self.tree.analysis_tree[node_id]
+        current_node = self.tree.grammar_tree[node_id]
         self.const_declarations(current_node.child[0])
         self.var_declarations(current_node.child[1])
         self.subprogram_declarations(current_node.child[2])
@@ -65,14 +67,14 @@ class SemanticAnalyzer:
         idlist → id{parameters.append((id.name,id.type))}
         将id加入参数表
         """
-        current_node = self.tree.analysis_tree[node_id]
+        current_node = self.tree.grammar_tree[node_id]
         parameters = []
-        if current_node.child_num == 1:
-            child_node = current_node.find_child_node(node_id, 0)
+        if len(current_node.child) == 1:
+            child_node = self.tree.find_child_node(node_id, 0)
             parameters.append(Parameter(child_node.value, None, child_node.row, child_node.column, False))
         else:
             parameters.extend(self.idlist(current_node.child[0]))
-            child_node = current_node.find_child_node(node_id, 2)
+            child_node = self.tree.find_child_node(node_id, 2)
             parameters.append(Parameter(child_node.value, None, child_node.row, child_node.column, False))
         return parameters
 
@@ -86,8 +88,8 @@ class SemanticAnalyzer:
         const_declarations → ε
         不需要检查
         """
-        current_node = self.tree.analysis_tree[node_id]
-        if current_node.child_num == 3:
+        current_node = self.tree.grammar_tree[node_id]
+        if len(current_node.child) == 3:
             self.const_declaration(current_node.child[1])
 
     def const_declaration(self, node_id):
@@ -96,15 +98,15 @@ class SemanticAnalyzer:
         const_declaration → id relop const_value{insert_item()}
         将标识符id插入符号表
         """
-        current_node = self.tree.analysis_tree[node_id]
-        if current_node.child_num == 3:
-            id_node = current_node.find_child_node(node_id, 0)
-            relop_node = current_node.find_child_node(node_id, 1)
+        current_node = self.tree.grammar_tree[node_id]
+        if len(current_node.child) == 3:
+            id_node = self.tree.find_child_node(node_id, 0)
+            relop_node = self.tree.find_child_node(node_id, 1)
             const_value_type = self.const_value(current_node.child[2])
         else:
             self.const_declaration(current_node.child[0])
-            id_node = current_node.find_child_node(node_id, 2)
-            relop_node = current_node.find_child_node(node_id, 3)
+            id_node = self.tree.find_child_node(node_id, 2)
+            relop_node = self.tree.find_child_node(node_id, 3)
             const_value_type = self.const_value(current_node.child[4])
 
         if relop_node.value != '=':
@@ -125,10 +127,10 @@ class SemanticAnalyzer:
         const_value → ' letter '{const_value.type=char}
         返回 const_value_type = (value, type)
         """
-        current_node = self.tree.analysis_tree[node_id]
+        current_node = self.tree.grammar_tree[node_id]
         const_value = None
         const_type = None
-        if current_node.child_num == 2:  # const_value → addop num{const_value.type=num}
+        if len(current_node.child) == 2:  # const_value → addop num{const_value.type=num}
             addop_node = self.tree.find_child_node(node_id, 0)
             num_node = self.tree.find_child_node(node_id, 1)
             if addop_node.value == '+':
@@ -143,7 +145,7 @@ class SemanticAnalyzer:
                 const_type = 'integer'
             if isinstance(const_value, float):
                 const_type = 'real'
-        elif current_node.child_num == 1:  # const_value → num {const_value.type=num}
+        elif len(current_node.child) == 1:  # const_value → num {const_value.type=num}
             num_node = self.tree.find_child_node(node_id, 0)
             const_value = num_node.value
             if isinstance(const_value, int):
@@ -167,8 +169,8 @@ class SemanticAnalyzer:
         var_declarations → ε
         不需要检查
         """
-        current_node = self.tree.analysis_tree[node_id]
-        if current_node.child_num == 3:
+        current_node = self.tree.grammar_tree[node_id]
+        if len(current_node.child) == 3:
             self.var_declaration(current_node.child[1])
 
     def var_declaration(self, node_id):
@@ -176,9 +178,9 @@ class SemanticAnalyzer:
         var_declaration → var_declaration ; idlist : type{insert_item()}
         var_declaration → idlist : type{insert_item()}
         """
-        current_node = self.tree.analysis_tree[node_id]
+        current_node = self.tree.grammar_tree[node_id]
         parameter_list = []
-        if current_node.child_num == 3:  # var_declaration → idlist : type{insert_item()}
+        if len(current_node.child) == 3:  # var_declaration → idlist : type{insert_item()}
             parameter_list = self.idlist(current_node.child[0])
             item_info = self.type(current_node.child[2])
             for parameter in parameter_list:
@@ -205,9 +207,9 @@ class SemanticAnalyzer:
                                             type.demension=period.demension;type.parameters=period.parameters}
         返回值：item_info = [变量类型，元素类型，数组大小(size, period)，数组维数]
         """
-        current_node = self.tree.analysis_tree[node_id]
+        current_node = self.tree.grammar_tree[node_id]
         item_info = []
-        if current_node.child_num == 1:
+        if len(current_node.child) == 1:
             var_type = self.basic_type(current_node.child[0])
             item_info = ["var", var_type, (None, None), None]
         else:
@@ -227,7 +229,7 @@ class SemanticAnalyzer:
         basic_type → boolean {basic_type=boolean}
         basic_type → char{basic_type=char}
         """
-        # current_node = self.tree.analysis_tree[node_id]
+        # current_node = self.tree.grammar_tree[node_id]
         child_node = self.tree.find_child_node(node_id, 0)
         return child_node.token
 
@@ -237,9 +239,9 @@ class SemanticAnalyzer:
         period → num .. num{period.demension++;period.parameters.append()}
         返回值：array_period = [(下限, 上限), ]
         """
-        current_node = self.tree.analysis_tree[node_id]
+        current_node = self.tree.grammar_tree[node_id]
         array_period = []
-        if current_node.child_num == 3:
+        if len(current_node.child) == 3:
             num_node1 = self.tree.find_child_node(node_id, 0)
             num_node2 = self.tree.find_child_node(node_id, 2)
         else:
@@ -273,8 +275,8 @@ class SemanticAnalyzer:
         subprogram_declarations → subprogram_declarations subprogram ;
         subprogram_declarations → ε
         """
-        current_node = self.tree.analysis_tree[node_id]
-        if current_node.child_num == 3:
+        current_node = self.tree.grammar_tree[node_id]
+        if len(current_node.child) == 3:
             self.subprogram_declarations(current_node.child[0])
             self.subprogram(current_node.child[1])
 
@@ -282,7 +284,7 @@ class SemanticAnalyzer:
         """
         subprogram → subprogram_head ; subprogram_body
         """
-        current_node = self.tree.analysis_tree[node_id]
+        current_node = self.tree.grammar_tree[node_id]
         self.subprogram_head(current_node.child[0])
         self.subprogram_body(current_node.child[2])
 
@@ -293,14 +295,14 @@ class SemanticAnalyzer:
         subprogram_head → function id formal_parameter : basic_type
                             {parameters=formal_parameter.list;return_type=basic_type;make_table()}
         """
-        current_node = self.tree.analysis_tree[node_id]
+        current_node = self.tree.grammar_tree[node_id]
         id_node = self.tree.find_child_node(node_id, 1)
         subprogram_name = id_node.value
         parameters = self.formal_parameter(current_node.child[2])
-        if current_node.child_num == 3:
+        if len(current_node.child) == 3:
             self.st_manager.make_table(subprogram_name, parameters, False, None)
             # 新建一个子表，将current_table指向新的子表
-        elif current_node.child_num == 5:
+        elif len(current_node.child) == 5:
             return_type = self.basic_type(current_node.child[4])
             self.st_manager.make_table(subprogram_name, parameters, True, return_type)
             # 新建一个子表，将current_table指向新的子表
@@ -310,9 +312,9 @@ class SemanticAnalyzer:
         formal_parameter → ( parameter_list ){formal_parameter.list=parameter_list}
         formal_parameter → ε{formal_parameter.list=[]}
         """
-        current_node = self.tree.analysis_tree[node_id]
+        current_node = self.tree.grammar_tree[node_id]
         parameters = []
-        if current_node.child_num == 3:
+        if len(current_node.child) == 3:
             parameters = self.parameter_list(current_node.child[1])
         return parameters
 
@@ -321,13 +323,13 @@ class SemanticAnalyzer:
         parameter_list → parameter_list ; parameter {parameter_list.append(parameter)}
         parameter_list → parameter{parameter_list.append(parameter)}
         """
-        current_node = self.tree.analysis_tree[node_id]
+        current_node = self.tree.grammar_tree[node_id]
         parameters = []
-        if current_node.child_num == 1:
+        if len(current_node.child) == 1:
             new_parameters = self.parameter(current_node.child[0])
             if new_parameters is not None:
                 parameters.extend(new_parameters)
-        elif current_node.child_num == 3:
+        elif len(current_node.child) == 3:
             new_parameters = self.parameter_list(current_node.child[0])
             if new_parameters is not None:
                 parameters.extend(new_parameters)
@@ -341,7 +343,7 @@ class SemanticAnalyzer:
         parameter → var_parameter{parameter=var_parameter}
         parameter → value_parameter{parameter=value_parameter}
         """
-        # current_node = self.tree.analysis_tree[node_id]
+        # current_node = self.tree.grammar_tree[node_id]
         child_node = self.tree.find_child_node(node_id, 0)
         parameters = []
         if child_node.token == 'var_parameter':
@@ -366,7 +368,7 @@ class SemanticAnalyzer:
         value_parameter → idlist : basic_type
                                 {idlist.type = basic_type;value_parameter=idlist}
         """
-        current_node = self.tree.analysis_tree[node_id]
+        current_node = self.tree.grammar_tree[node_id]
         parameters = self.idlist(current_node.child[0])
         parameter_type = self.basic_type(current_node.child[2])
         for i, value in enumerate(parameters):
@@ -381,7 +383,7 @@ class SemanticAnalyzer:
         """
         subprogram_body → const_declarations var_declarations compound_statement
         """
-        current_node = self.tree.analysis_tree[node_id]
+        current_node = self.tree.grammar_tree[node_id]
         self.const_declarations(current_node.child[0])
         self.var_declarations(current_node.child[1])
         self.compound_statement(current_node.child[2])
@@ -390,7 +392,7 @@ class SemanticAnalyzer:
         """
         compound_statement → begin statement_list end
         """
-        current_node = self.tree.analysis_tree[node_id]
+        current_node = self.tree.grammar_tree[node_id]
         self.statement_list(current_node.child[1])
 
     def statement_list(self, node_id):
@@ -398,10 +400,10 @@ class SemanticAnalyzer:
         statement_list → statement_list ; statement
         statement_list → statement
         """
-        current_node = self.tree.analysis_tree[node_id]
-        if current_node.child_num == 1:
+        current_node = self.tree.grammar_tree[node_id]
+        if len(current_node.child) == 1:
             self.statement(current_node.child[0])
-        elif current_node.child_num == 3:
+        elif len(current_node.child) == 3:
             self.statement_list(current_node.child[0])
             self.statement(current_node.child[2])
 
@@ -416,15 +418,15 @@ class SemanticAnalyzer:
         statement → write ( expression_list ){对非表达式进行search_item()}
         statement → ε
         """
-        current_node = self.tree.analysis_tree[node_id]
-        if current_node.child_num == 1:
+        current_node = self.tree.grammar_tree[node_id]
+        if len(current_node.child) == 1:
             child_node = self.tree.find_child_node(node_id, 0)
             if child_node.token == "procedure_call":
                 self.procedure_call(child_node.id)
             elif child_node.token == "compound_statement":
                 self.compound_statement(child_node.id)
 
-        elif current_node.child_num == 3:
+        elif len(current_node.child) == 3:
             variable = self.variable(current_node.child[0])
             expression = self.expression(current_node.child[3])
             if len(variable) == 0 or len(expression) == 0:
@@ -440,7 +442,7 @@ class SemanticAnalyzer:
                 print('语义错误：第{0}行, 第{1}列: 变量未定义'.format(variable[2], variable[3]))
                 self.result = False
 
-        elif current_node.child_num == 4:  # statement → read ( variable_list ) {对非表达式进行search_item()}
+        elif len(current_node.child) == 4:  # statement → read ( variable_list ) {对非表达式进行search_item()}
             # statement → write ( expression_list ){对非表达式进行search_item()}
             child_node = self.tree.find_child_node(node_id, 0)
             if child_node.token == "read":
@@ -467,7 +469,7 @@ class SemanticAnalyzer:
                             else:
                                 result_item.used_row.append(item[2])  # TODO:此处需要将修改存回
 
-        elif current_node.child_num == 5:  # statement → if expression then statement else_part
+        elif len(current_node.child) == 5:  # statement → if expression then statement else_part
             return_type = self.expression(current_node.child[1])  # if a then b: a 应该为boolean表达式
             if len(return_type) == 0:
                 self.result = False
@@ -477,7 +479,7 @@ class SemanticAnalyzer:
             self.statement(current_node.child[3])
             self.else_part(current_node.child[4])
 
-        elif current_node.child_num == 8:  # statement → for id assignop expression to expression do statement
+        elif len(current_node.child) == 8:  # statement → for id assignop expression to expression do statement
             id_node = self.tree.find_child_node(node_id, 1)
             return_type1 = self.expression(current_node.child[3])  # 第一个expression
             return_type2 = self.expression(current_node.child[5])  # 第二个expression
@@ -506,9 +508,9 @@ class SemanticAnalyzer:
         variable_list → variable{variable_list.append()}
         返回id_list = [[id名，类型，行，列, 数组值的类型(不是数组，则为None)], ]
         """
-        current_node = self.tree.analysis_tree[node_id]
+        current_node = self.tree.grammar_tree[node_id]
         variable_list = []
-        if current_node.child_num == 3:
+        if len(current_node.child) == 3:
             variable_list = self.variable_list(current_node.child[0])
         result = self.variable(current_node.child[2])
         if len(result) != 0:
@@ -520,20 +522,19 @@ class SemanticAnalyzer:
         variable → id id_varpart{search_item();可能需要数组越界检查}
         返回 [id名，类型，行，列, 数组值的类型(不是数组，则为None)]
         """
-        current_node = self.tree.analysis_tree[node_id]
+        current_node = self.tree.grammar_tree[node_id]
         variable = []
         id_node = self.tree.find_child_node(node_id, 0)
-        id_varpart_node = self.tree.find_child_node(node_id, 1)
         current_item = self.st_manager.search_item(id_node.value,
                                                    self.st_manager.current_table_name)
         if current_item is not None:
             current_item.used_row.append(id_node.row)  # TODO:缺少保存过程
-            self.id_varpart(current_node.child[1])
+            index = self.id_varpart(current_node.child[1])  # TODO:如果要进行数组越界检查，需要传回表达式的值
             if current_item.identifier_type == "array":
-                if id_varpart_node.child_num == 3:
+                if isinstance(index, int):
                     variable = [current_item.name, "array", id_node.row, id_node.column, current_item.value_type]
                 else:
-                    print("语义错误：第{0}行, 第{1}列: 无法对数组名进行操作".format(id_node.row, id_node.column))
+                    print("语义错误：第{0}行, 第{1}列: 数组下标异常".format(id_node.row, id_node.column))
                     self.result = False
             elif current_item.identifier_type == "var" or current_item.identifier_type == "function":
                 variable = [current_item.name, current_item.value_type, id_node.row, id_node.column, None]
@@ -550,22 +551,23 @@ class SemanticAnalyzer:
         id_varpart → [ expression_list ] {id_varpart=expression_list}
         id_varpart → ε
         """
-        current_node = self.tree.analysis_tree[node_id]
-        expression_list = []
-        if current_node.child_num == 3:
+        current_node = self.tree.grammar_tree[node_id]
+        index = None
+        if len(current_node.child) == 3:
             expression_list = self.expression_list(current_node.child[1])
-            if len(expression_list) != 0:
-                for expression in expression_list:
-                    if expression[1] != "integer":
-                        print('语义错误：第{0}行: 数组下标应该为integer'.format(expression[2]))
-                        self.result = False
+            if len(expression_list) == 1:
+                if expression_list[0][1] != "integer":
+                    print('语义错误：第{0}行: 数组下标应该为integer'.format(expression_list[0][2]))
+                    self.result = False
+                else:
+                    index = expression_list[0][5]
 
     def procedure_call(self, node_id):
         """
         procedure_call → id
         procedure_call → id ( expression_list ){id=search_item();传参判定}
         """
-        current_node = self.tree.analysis_tree[node_id]
+        current_node = self.tree.grammar_tree[node_id]
         id_node = self.tree.find_child_node(node_id, 0)
         result_item = self.st_manager.search_item(id_node.value, self.st_manager.current_table_name)
         if result_item is None:
@@ -576,10 +578,10 @@ class SemanticAnalyzer:
             self.result = False
         else:
             result_item.used_row.append(id_node.row)  # TODO:缺少保存过程
-            if current_node.child_num == 1 and len(result_item.arguments) != 0:
+            if len(current_node.child) == 1 and len(result_item.arguments) != 0:
                 print('语义错误：第{0}行, 第{1}列: 该过程或函数需要参数'.format(id_node.row, id_node.column))
                 self.result = False
-            elif current_node.child_num == 4:
+            elif len(current_node.child) == 4:
                 if len(result_item.arguments) != 0:
                     expression_list = self.expression_list(current_node.child[2])
                     if len(expression_list) != 0:
@@ -601,21 +603,19 @@ class SemanticAnalyzer:
         else_part → else statement
         else_part → ε
         """
-        current_node = self.tree.analysis_tree[node_id]
-        if current_node.child_num == 2:
+        current_node = self.tree.grammar_tree[node_id]
+        if len(current_node.child) == 2:
             self.statement(current_node.child[1])
 
     def expression_list(self, node_id):
         """
         expression_list → expression_list , expression {expression_list.append()}
         expression_list → expression{expression_list.append()}
-        返回expression_list = [[id, type, row, column],
-                              [expression, return_type, None, None],
-                              #[array, element_type, id的行，id的列] 可以不要#]
+        返回[id, type, row, column, value] or [expression, return_type, None, None, None]
         """
-        current_node = self.tree.analysis_tree[node_id]
+        current_node = self.tree.grammar_tree[node_id]
         expression_list = []
-        if current_node.child_num == 3:
+        if len(current_node.child) == 3:
             expression_list = self.expression_list(current_node.child[0])
             result = self.expression(current_node.child[2])
         else:
@@ -628,13 +628,11 @@ class SemanticAnalyzer:
         """
         expression → simple_expression relop simple_expression{逻辑判断决定赋值}
         expression → simple_expression{expression.type = simple_expression.type}
-        返回：[expression, return_type, None, None] or
-              [id, type, row, column] or \n
-              # [array, element_type, id的行，id的列] 这个可以不要
+        返回[id, type, row, column, value] or [expression, return_type, None, None, None]
         """
         expression = []
-        current_node = self.tree.analysis_tree[node_id]
-        if current_node.child_num == 3:
+        current_node = self.tree.grammar_tree[node_id]
+        if len(current_node.child) == 3:
             '''
             检查两个simple_expression是否类型可以比较，
             如果可以则返回值类型为 boolean
@@ -653,7 +651,7 @@ class SemanticAnalyzer:
                     print("语义错误：第{0}行: 类型同，无法比较".format(relop_node.row))  # 这里使用relop的行
                     self.result = False
 
-        elif current_node.child_num == 1:
+        elif len(current_node.child) == 1:
             expression = self.simple_expression(current_node.child[0])
         return expression
 
@@ -661,17 +659,16 @@ class SemanticAnalyzer:
         """
         simple_expression → simple_expression addop term {逻辑判断决定赋值}
         simple_expression → term{simple_expression.type = term.type}
-        返回[id, type, row, column] or # [array, item_type, id的行, id的列] 这个可以不要
-            or [expression, return_type, None, None]
+        返回[id, type, row, column, value] or [expression, return_type, None, None, None]
         """
         simple_expression = []
-        current_node = self.tree.analysis_tree[node_id]
+        current_node = self.tree.grammar_tree[node_id]
         '''
         判断两个是否能够addop，
         如果能simple_expression = ['expression', type, None, None]，否则，为空
         可能涉及到一些类型转换，例如int转real之类的
         '''
-        if current_node.child_num == 3:
+        if len(current_node.child) == 3:
             sub_simple_expressipon = self.simple_expression(current_node.child[0])
             addop_node = self.tree.find_child_node(node_id, 1)  # 可能要用到该属性
             sub_term = self.term(current_node.child[2])
@@ -708,7 +705,7 @@ class SemanticAnalyzer:
                             addop_node.row, addop_node.value))  # 这里使用addop的行
                         self.result = False
 
-        elif current_node.child_num == 1:
+        elif len(current_node.child) == 1:
             simple_expression = self.term(current_node.child[0])
         return simple_expression
 
@@ -716,12 +713,11 @@ class SemanticAnalyzer:
         """
         term → term mulop factor{逻辑判断决定赋值}
         term → factor{term.type = factor.type}
-        返回[id, type, row, column] or [array, item_type, id的行, id的列]
-            or [expression, return_type, None, None]
+        返回[id, type, row, column, value] or [expression, return_type, None, None, None]
         """
         term = []
-        current_node = self.tree.analysis_tree[node_id]
-        if current_node.child_num == 3:
+        current_node = self.tree.grammar_tree[node_id]
+        if len(current_node.child) == 3:
             sub_term = self.term(current_node.child[0])
             mulop_node = self.tree.find_child_node(node_id, 1)  # 可能要用到
             sub_factor = self.factor(current_node.child[2])
@@ -766,7 +762,7 @@ class SemanticAnalyzer:
                     else:
                         print('语义错误：第{0}行: 该类型不能进行{1}运算'.format(mulop_node.row, mulop_node.value))
                         self.result = False
-        elif current_node.child_num == 1:
+        elif len(current_node.child) == 1:
             term = self.factor(current_node.child[0])
         return term
 
@@ -778,12 +774,11 @@ class SemanticAnalyzer:
         factor → ( expression ) {factor.type = expression.type}
         factor → not factor {factor.type = factor1.type}
         factor → uminus factor {factor.type = factor1.type}
-        返回[id, type, row, column] or [array, item_type, id的行, id的列]
-            or [expression, return_type, None, None]
+        返回[id, type, row, column, value] or [expression, return_type, None, None, None]
         """
         factor = []
-        current_node = self.tree.analysis_tree[node_id]
-        if current_node.child_num == 1:
+        current_node = self.tree.grammar_tree[node_id]
+        if len(current_node.child) == 1:
             child_node = self.tree.find_child_node(node_id, 0)
             if child_node.token == "num":
                 if isinstance(current_node.value, int):
@@ -798,7 +793,8 @@ class SemanticAnalyzer:
                         factor = [variable[0], variable[4], variable[2], variable[3]]
                     else:
                         factor = [variable[0], variable[1], variable[2], variable[3]]
-        elif current_node.child_num == 4:
+        elif len(current_node.child) == 4:
+            # factor → id ( expression_list ){id.type=search_item();传参判定;factor.type = id.type}
             '''
             检查id是否是一个函数或者过程，是否定义
             如果未定义直接报错，然后直接return
@@ -827,11 +823,11 @@ class SemanticAnalyzer:
             else:
                 print("语义错误：第{0}行, 第{1}列: id未定义".format(id_node.row, id_node.column))  # 在id行报错
                 self.result = False
-        elif current_node.child_num == 3:
+        elif len(current_node.child) == 3:
             expression = self.expression(current_node.child[1])
             if len(expression) != 0:
                 factor = ["expression", expression[1], expression[2], expression[3]]
-        elif current_node.child_num == 2:
+        elif len(current_node.child) == 2:
             child_node = self.tree.find_child_node(node_id, 0)
             if child_node.token == "not":
                 sub_factor = self.factor(current_node.child[1])
