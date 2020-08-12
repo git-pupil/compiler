@@ -65,9 +65,6 @@ class STManager:
     all_symbol_table = {}  # {'名称'：SymbolTable, }
     current_table_name = None  # 当前所在的表
 
-    def __init__(self):
-        self.all_symbol_tabel = None
-
     def make_table(self, name, parameter_list, is_func, return_type):
         """
         创建一个新表，表名为name，并将当前所在的表修改为新表
@@ -93,7 +90,7 @@ class STManager:
             func_type = ''  # 将子表自身属性作为Item加入新表条目
             if name == 'main':
                 func_type = 'program'
-            elif is_func == True:
+            elif is_func:
                 func_type = 'function'
             else:
                 func_type = 'procedure'
@@ -104,9 +101,9 @@ class STManager:
                 self.insert_item(new_table_item, 'main')
             self.locate(name)
 
-            if parameter_list != []:  # 如果有形参,将形参逐个加入新表条目
+            if parameter_list:  # 如果有形参,将形参逐个加入新表条目
                 for parameter in parameter_list:
-                    if parameter.vary == True:
+                    if parameter.vary:
                         identifier_type = 'addr'
                     else:
                         identifier_type = 'var'
@@ -126,7 +123,7 @@ class STManager:
             True：成功
             False：失败
         """
-        if self.is_redefined(item.name, table_name) == True:  # 存在重名
+        if self.is_redefined(item.name, table_name):  # 存在重名
             print('存在重名表项')
             return False  # 插入失败
         else:  # 要插入的表中该变量名未定义
@@ -190,7 +187,7 @@ class STManager:
         """
         从符号表根据func_name提取函数的返回值类型
         """
-        func_type = self.all_symbol_tabel[func_name].return_type
+        func_type = self.all_symbol_table[func_name].return_type
         return func_type
 
     def checkptype(self, func_name, argument_type_list):
@@ -201,7 +198,7 @@ class STManager:
            列表形如(int, char, real)
         """
         parameter_type_list = []
-        for x in self.all_symbol_tabel[func_name].parameter_list:  # 获取形参类型列表
+        for x in self.all_symbol_table[func_name].parameter_list:  # 获取形参类型列表
             parameter_type_list.append(x.type)
         result = operator.eq(parameter_type_list, argument_type_list)  # 比较
         return result
@@ -219,7 +216,7 @@ class STManager:
         if parameter_list is None:
             parameter_list = []
         parameter_num = len(parameter_list)  # 实参个数
-        if (func_name in self.all_symbol_tabel.keys()):  # 要比较的函数名在符号表中
+        if func_name in self.all_symbol_table.keys():  # 要比较的函数名在符号表中
             if (self.getpnum(func_name) == parameter_num and  # 实参个数与形参个数一致
                     self.checkptype(func_name, parameter_list) == True):  # 实参类型与形参类型一致
                 return self.getfunc_type(func_name)  # 返回函数的返回值类型:None,int,bool...
@@ -233,8 +230,8 @@ class STManager:
         个数判断
         从符号表中根据func_name提取形参个数
         """
-        pnum = len(self.all_symbol_tabel[func_name].parameter_list)  # 获取到形参的个数
-        return pnum
+        p_num = len(self.all_symbol_table[func_name].parameter_list)  # 获取到形参的个数
+        return p_num
 
     def is_addr(self, item_name, table_name):
         """
@@ -243,8 +240,8 @@ class STManager:
            true 传地址；
            false 传值
         """
-        if table_name in self.all_symbol_tabel.keys():
-            arguments = self.all_symbol_tabel[table_name].parameter_list
+        if table_name in self.all_symbol_table.keys():
+            arguments = self.all_symbol_table[table_name].parameter_list
             for item in arguments:
                 if item_name == item.name:
                     return item.vary
@@ -260,7 +257,7 @@ class STManager:
            返回：[(下限, 上限), ]
         """
         result_item = self.search_item(array_name, table_name)
-        if result_item == None:
+        if result_item is None:
             print('oooops，未定义')
             return None
         elif result_item.identifier_type != 'array':
@@ -287,7 +284,7 @@ class STManager:
         返回：true or false
         """
         result_item = self.search_item(item_name, 'main')
-        if result_item == None:
+        if result_item is None:
             return False
         else:
             if result_item.identifier_type == 'function':
@@ -299,19 +296,19 @@ class STManager:
         """
         返回对应的参数列表
         """
-        if table_name in self.all_symbol_tabel.keys():
-            return [item.vary for item in self.all_symbol_tabel[table_name].parameter_list]
+        if table_name in self.all_symbol_table.keys():
+            return [item.vary for item in self.all_symbol_table[table_name].parameter_list]
         return None
 
     def output_table_item(self):
         """输出所有表的表项"""
-        for symboltable in self.all_symbol_tabel.values():
+        for symboltable in self.all_symbol_table.values():
             print('-----------------------------表名:{}----------------------------'.format(symboltable.name))
             if symboltable.name != 'main':
                 for item in symboltable.parameter_list:
                     print('参数名：{0}，类型：{1}, 是否按地址传递：{2}'.format(item.name, item.type, (not item.type)))
             print('[name]      [identifier_type]  [value_type] [value] [declare_row] [used_row] [demision]')
-            if symboltable.item_list != []:
+            if symboltable.item_list:
                 for table_item in symboltable.item_list:
                     print(table_item.name, table_item.identifier_type, table_item.value_type, table_item.value,
                           table_item.declare_row, table_item.used_row, sep='  ', end='  ')
