@@ -26,7 +26,6 @@ class SemanticAnalyzer:
         programstruct -> program_head ; program_body .
         不需要进行检查
         """
-        # current_node = self.tree.grammar_tree[node_id]
         current_node_id = self.tree.grammar_tree[0].id
         current_node = self.tree.grammar_tree[current_node_id]  # 找到当前节点
         self.program_head(current_node.child[0])
@@ -126,6 +125,8 @@ class SemanticAnalyzer:
         const_value → num {const_value.type=num}
         const_value → ' letter '{const_value.type=char}
         返回 const_value_type = (value, type)
+
+        修改：const_value → addop int_num | int_num | addop real_num | real_num | ' letter '
         """
         current_node = self.tree.grammar_tree[node_id]
         const_value = None
@@ -238,6 +239,8 @@ class SemanticAnalyzer:
         period → period ， num .. num {period.demension++;period.parameters.append()}
         period → num .. num{period.demension++;period.parameters.append()}
         返回值：array_period = [(下限, 上限), ]
+
+        修改：period → period, int_num .. int_num | int_num .. int_num
         """
         current_node = self.tree.grammar_tree[node_id]
         array_period = []
@@ -428,7 +431,7 @@ class SemanticAnalyzer:
 
         elif len(current_node.child) == 3:
             variable = self.variable(current_node.child[0])
-            expression = self.expression(current_node.child[3])
+            expression = self.expression(current_node.child[2])
             if len(variable) == 0 or len(expression) == 0:
                 return
             result_item = self.st_manager.search_item(variable[0], self.st_manager.current_table_name)
@@ -618,10 +621,12 @@ class SemanticAnalyzer:
         if len(current_node.child) == 3:
             expression_list = self.expression_list(current_node.child[0])
             result = self.expression(current_node.child[2])
+            if len(result) != 0:
+                expression_list.append(self.expression(current_node.child[2]))
         else:
             result = self.expression(current_node.child[0])
-        if len(result) != 0:
-            expression_list.append(self.expression(current_node.child[0]))
+            if len(result) != 0:
+                expression_list.append(self.expression(current_node.child[0]))
         return expression_list
 
     def expression(self, node_id):
@@ -648,11 +653,12 @@ class SemanticAnalyzer:
                         print('语义错误：第{0}行: 类型{1}无法比较'.format(relop_node.row, se1[1]))  # 这里使用relop的行
                         self.result = False
                 else:
-                    print("语义错误：第{0}行: 类型同，无法比较".format(relop_node.row))  # 这里使用relop的行
+                    print("语义错误：第{0}行: 类型不同，无法比较".format(relop_node.row))  # 这里使用relop的行
                     self.result = False
 
         elif len(current_node.child) == 1:
             expression = self.simple_expression(current_node.child[0])
+
         return expression
 
     def simple_expression(self, node_id):
@@ -707,6 +713,7 @@ class SemanticAnalyzer:
 
         elif len(current_node.child) == 1:
             simple_expression = self.term(current_node.child[0])
+
         return simple_expression
 
     def term(self, node_id):
@@ -727,7 +734,7 @@ class SemanticAnalyzer:
                     if sub_term[1] == "integer":
                         if mulop_node.value == '/':
                             term = ["expression", "real", mulop_node.row, mulop_node.column]  # 这里使用的 mulop 的行列
-                        elif mulop_node.value == '*' or mulop_node.value == 'div' or mulop_node == 'mod':
+                        elif mulop_node.value == '*' or mulop_node.value == 'div' or mulop_node.value == 'mod':
                             term = ["expression", "integer", mulop_node.row, mulop_node.column]  # 这里使用的 mulop 的行列
                         else:
                             print('语义错误：第{0}行: integer类型不能进行and运算'.format(mulop_node.row))
@@ -775,17 +782,17 @@ class SemanticAnalyzer:
         factor → not factor {factor.type = factor1.type}
         factor → uminus factor {factor.type = factor1.type}
         返回[id, type, row, column, value] or [expression, return_type, None, None, None]
+
+        factor → int_num | real_num | variable | id ( expression_list ) | ( expression ) | not factor | uminus factor  # 进行了修改
         """
         factor = []
         current_node = self.tree.grammar_tree[node_id]
         if len(current_node.child) == 1:
             child_node = self.tree.find_child_node(node_id, 0)
-            if child_node.token == "num":
-                if isinstance(current_node.value, int):
-                    child_type = "integer"
-                else:  # num只可能出现int、real两种类型
-                    child_type = "real"
-                factor = ["expression", child_type, child_node.row, child_node.column]
+            if child_node.token == "int_num":
+                factor = ["expression", "integer", child_node.row, child_node.column]
+            elif child_node.token == "real_num":
+                factor = ["expression", "real", child_node.row, child_node.column]
             elif child_node.token == "variable":
                 variable = self.variable(child_node.id)
                 if len(variable) != 0:

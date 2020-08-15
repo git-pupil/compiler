@@ -24,7 +24,7 @@ filename=[
     "test/grammar_right_2.pas"  # 17 语法测试 正例2 - PPT的正确代码示例
 ]
 
-result = word_analyse(filename[16])
+result = word_analyse(filename[15])
 
 # for word in result:
 #     print(word)

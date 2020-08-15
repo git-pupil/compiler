@@ -312,4 +312,4 @@ class STManager:
                 for table_item in symboltable.item_list:
                     print(table_item.name, table_item.identifier_type, table_item.value_type, table_item.value,
                           table_item.declare_row, table_item.used_row, sep='  ', end='  ')
-                    print(table_item.demension)
+                    print(table_item.dimension)
