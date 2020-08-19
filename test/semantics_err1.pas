@@ -1,5 +1,5 @@
 program example(input,output);
-var x,y:integer; x,z : real; test4 : boolean; abs : array[0..4.5] of integer; abd : array[20..10] of integer; {wrong 3}
+var x,y:integer; x,z : real; test4 : boolean; abs : array[0..4] of integer; abd : array[20..10] of integer; {wrong 3}
 function gcd(a,b:integer):integer;
 var abc : array[0..6] of integer;
 begin

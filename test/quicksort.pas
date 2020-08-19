@@ -1,8 +1,8 @@
 program sort (input,output);
-VAR a : array[0..4] of integer;
+var a : array[0..4] of integer;
 x,y: integer;
-procedure readarray;
-VAR i : integer;
+procedure ra;
+var i : integer;
 begin
 i:= 0;
 while i<5 do
@@ -12,8 +12,8 @@ a[i]:= y;
 i:=i+1
 end
 end;
-procedure quicksort (l,h:integer);
-VAR i,j,k,m: integer;
+procedure qs (l,h:integer);
+var i,j,k,m: integer;
 begin
 i:= l;
 j:= h;
@@ -34,16 +34,16 @@ end;
 a[j]:=a[i]
 end;
 a[i]:=k;
-quicksort(l,i-1);
-quicksort(j+1,h)
+qs(l,i-1);
+qs(j+1,h)
 end
 else 
 m:=0
 end;
 begin 
 x:=0;
-readarray; 
-quicksort(0,4);
+ra; 
+qs(0,4);
 while x<5 do
 begin
 y:=a[x];

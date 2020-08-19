@@ -22,10 +22,10 @@ filename=[
     "test/right_example.pas",   # 15
     "test/grammar_right_1.pas",  # 16 语法测试 正例1 - 非常简单，便于测试
     "test/grammar_right_2.pas",  # 17 语法测试 正例2 - PPT的正确代码示例
-    "test/semantics_right.pas"  # 18 完全正确的PPT代码示例
+    "test/semantics_right.pas",  # 18 完全正确的PPT代码示例
 ]
 
-result = word_analyse(filename[18])
+result = word_analyse(filename[5])
 
 # for word in result:
 #     print(word)

@@ -188,6 +188,7 @@ class SemanticAnalyzer:
                 new_item = Item(parameter.name, item_info[0], item_info[1],
                                 None, None, None, parameter.row, [])
                 if not self.st_manager.insert_item(new_item, self.st_manager.current_table_name):
+                    print(current_node.id)
                     print("语义错误：第{0}行, 第{1}列: {2}重定义或该符号表不存在".format(parameter.row, parameter.column, parameter.name))
                     self.result = False
         else:  # var_declaration → var_declaration ; idlist : type{insert_item()}
@@ -218,7 +219,7 @@ class SemanticAnalyzer:
             array_type = self.basic_type(current_node.child[5])
             size = 0
             for item in array_period:
-                size += (item[1] - item[0])
+                size += (int(item[1]) - int(item[0]))
             if len(array_period) > 0:
                 item_info = ["array", array_type, (size, array_period), len(array_period)]
         return item_info
@@ -253,16 +254,15 @@ class SemanticAnalyzer:
                 array_period.extend(new_array_period)
             num_node1 = self.tree.find_child_node(node_id, 2)
             num_node2 = self.tree.find_child_node(node_id, 4)
-
-        if num_node1.value < 0 or not isinstance(num_node1.value, int):
+        if int(num_node1.value) < 0:
             print('语义错误：第{0}行, 第{1}列: 数组下标必须为非负整数'.format(num_node1.row, num_node1.column))  # 同时输出行，列
             self.result = False
             return array_period
-        if num_node2.value < 0 or not isinstance(num_node2.value, int):
+        if int(num_node2.value) < 0:
             print('语义错误：第{0}行, 第{1}列: 数组下标必须为非负整数'.format(num_node2.row, num_node2.column))  # 同时输出行，列
             self.result = False
             return array_period
-        if num_node1.value > num_node2.value:
+        if int(num_node1.value) > int(num_node2.value):
             print('语义错误：第{0}行, 第{1}列: 数组上下限错误'.format(num_node2.row, num_node2.column))  # 同时输出行，列
             self.result = False
             return array_period
@@ -419,6 +419,7 @@ class SemanticAnalyzer:
         statement → for id assignop expression to expression do statement
         statement → read ( variable_list ) {对非表达式进行search_item()}
         statement → write ( expression_list ){对非表达式进行search_item()}
+        statement → while expression do statement
         statement → ε
         """
         current_node = self.tree.grammar_tree[node_id]
@@ -470,11 +471,21 @@ class SemanticAnalyzer:
                                 print('语义错误：第{0}行, 第{1}列: 变量{2}未定义'.format(item[2], item[3], item[0]))
                                 self.result = False
                             else:
-                                result_item.used_row.append(item[2])  # TODO:此处需要将修改存回
+                                result_item.used_row.append(item[2])
+            elif child_node.token == "while":
+                return_type = self.expression(current_node.child[1])  # 暂时不判断expression的返回值类型
+                if len(return_type) > 0:
+                    if return_type[1] == 'boolean':
+                        self.statement(current_node.child[3])
+                    else:
+                        print('语义错误：第{0}行: while A do B：A 应该为布尔表达式'.format(
+                            self.tree.find_child_node(node_id, 0).row))  # 选择 if 那一行'
+                        self.result = False
 
         elif len(current_node.child) == 5:  # statement → if expression then statement else_part
             return_type = self.expression(current_node.child[1])  # if a then b: a 应该为boolean表达式
             if len(return_type) == 0:
+                print('语义错误：第{0}行: if A then B：A 应该为布尔表达式'.format(current_node.row))
                 self.result = False
             elif return_type[1] != "boolean":
                 print('语义错误：第{0}行: if A then B：A 应该为布尔表达式'.format(return_type[2]))
@@ -495,7 +506,7 @@ class SemanticAnalyzer:
                 self.result = False
             elif len(return_type1) != 0 and len(return_type2) != 0:
 
-                result_item.used_row.append(id_node.row)  # TODO:缺少存入步骤
+                result_item.used_row.append(id_node.row)
                 if result_item.value_type == "integer" and return_type1[1] == "integer" \
                         and return_type2[1] == "integer":
                     self.statement(current_node.child[7])
@@ -531,16 +542,16 @@ class SemanticAnalyzer:
         current_node = self.tree.grammar_tree[node_id]
         variable = []
         id_node = self.tree.find_child_node(node_id, 0)
+        child_id_varpart_node = self.tree.find_child_node(node_id, 1)
         current_item = self.st_manager.search_item(id_node.value,
                                                    self.st_manager.current_table_name)
         if current_item is not None:
             current_item.used_row.append(id_node.row)
-            index = self.id_varpart(current_node.child[1])  # TODO:如果要进行数组越界检查，需要传回表达式的值
             if current_item.identifier_type == "array":
-                if isinstance(index, int):
+                if len(child_id_varpart_node.child) == 3:
                     variable = [current_item.name, "array", id_node.row, id_node.column, current_item.value_type]
                 else:
-                    print("语义错误：第{0}行, 第{1}列: 数组下标异常".format(id_node.row, id_node.column))
+                    print("语义错误：第{0}行, 第{1}列: 无法对数组名进行操作".format(id_node.row, id_node.column))
                     self.result = False
             elif current_item.identifier_type == "var" or current_item.identifier_type == "function":
                 variable = [current_item.name, current_item.value_type, id_node.row, id_node.column, None]
@@ -565,8 +576,6 @@ class SemanticAnalyzer:
                 if expression_list[0][1] != "integer":
                     print('语义错误：第{0}行: 数组下标应该为integer'.format(expression_list[0][2]))
                     self.result = False
-                else:
-                    index = expression_list[0][5]
 
     def procedure_call(self, node_id):
         """
@@ -583,8 +592,8 @@ class SemanticAnalyzer:
             print('语义错误：第{0}行, 第{1}列: {2}不能当作过程或者函数调用'.format(id_node.row, id_node.column, id_node.value))
             self.result = False
         else:
-            result_item.used_row.append(id_node.row)  # TODO:缺少保存过程
-            if len(current_node.child) == 1 and len(result_item.arguments) != 0:
+            result_item.used_row.append(id_node.row)
+            if len(current_node.child) == 1 and len(result_item.parameter_list) != 0:
                 print('语义错误：第{0}行, 第{1}列: 该过程或函数需要参数'.format(id_node.row, id_node.column))
                 self.result = False
             elif len(current_node.child) == 4:
@@ -594,7 +603,7 @@ class SemanticAnalyzer:
                         args = []
                         for item in expression_list:
                             args.append(item[1])
-                        if not self.st_manager.complare_args(id_node.value, args):  # 判断是否参数列表的个数与类型是否符合 TODO:函数未完成
+                        if not self.st_manager.complare_args(id_node.value, args):  # 判断是否参数列表的个数与类型是否符合
                             print('语义错误：第{0}行, 第{1}列: 形参、实参不匹配'.format(id_node.row, id_node.column))
                             self.result = False
                     else:

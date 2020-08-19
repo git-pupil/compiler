@@ -110,7 +110,7 @@ class GrammarAnalysis:
             'statement': ['variable assignop expression', 'procedure_call', 'compound_statement',
                           'if expression then statement else_part',
                           'for id assignop expression to expression do statement', 'read ( variable_list )',
-                          'write ( expression_list )', 'e'],
+                          'write ( expression_list )', 'while expression do statement', 'e'],
             'variable_list': ['variable_list , variable', 'variable'],
             'variable': ['id id_varpart'],
             'id_varpart': ['[ expression_list ]', 'e'],
@@ -397,7 +397,7 @@ class GrammarAnalysis:
         return False
 
     def LR1(self):  # 进行LR1分析
-        stack = [('0', (True,'','',0,0))]  # 分析栈 --- 状态栈 + 符号栈(字符串，记号，行号，列号)
+        stack = [('0', (True,'','',0,0))]  # 分析栈 --- 状态栈 + 符号栈(True or False，字符串，记号，行号，列号)
         self.tokens.append([True,'$','$',self.tokens[-1][3],self.tokens[-1][4]+1])
         ip = 0
 
@@ -429,6 +429,7 @@ class GrammarAnalysis:
                     break
             else:
                 print('语法分析错误')
+                print('错误位置:'+str(self.tokens[ip][3])+'行'+str(self.tokens[ip][4])+'列')
                 exit(1)
                 break
 
