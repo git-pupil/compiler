@@ -124,6 +124,7 @@ class GrammarAnalysis:
         }
 
     def run(self,tokens):  # 进行语法分析
+
         self.get_terminal_and_nonterminal_set()
         self.get_first_set()
         self.get_DFA()  # 产生自动机
@@ -251,7 +252,7 @@ class GrammarAnalysis:
                             J.append([temp, list(b)])
         return K
 
-    def get_go(self, I, X):  # 获取转移函数go
+    def get_go(self, I, X):  # 获取后继项目
         J = []
 
         # 遍历每个项目
@@ -293,7 +294,7 @@ class GrammarAnalysis:
 
         return result
 
-    def get_DFA(self):  # 获取项目规范集族
+    def get_DFA(self):  # 获取项目规范集族（及转移函数）
         status_num = 0  # 状态数
         self.status.append(self.merge(self.get_closure([[self.expanded_grammar, ['$']]])))  # 扩展文法
 
@@ -428,6 +429,7 @@ class GrammarAnalysis:
                     break
             else:
                 print('语法分析错误')
+                exit(1)
                 break
 
         # print("对符号串的分析动作：")
@@ -450,9 +452,11 @@ class GrammarAnalysis:
         for nodes in self.reduce_nodes:
             self.grammar_tree.insert_node(nodes)
             
-        self.grammar_tree.output()
+        # self.grammar_tree.output()
 
 
 def grammar_analyse(tokens):
     tree = GrammarAnalysis()
     return tree.run(tokens)
+
+

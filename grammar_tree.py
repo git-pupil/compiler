@@ -6,10 +6,14 @@ class TreeNode:
     语法树结点
     '''
 
-    def __init__(self, id, parent, token_info=(True, None, 'e', None, None), statute_count=-1):
+    def __init__(self, id, parent, token_info=(True, None, 'e', None, None), statute_count=-1, child= None):
         self.id = id  # 唯一id
         self.parent = parent  # 父节点id
-        self.child = []  # 存储子节点id
+
+        if child:# 存储子节点id
+            self.child = child
+        else:
+            self.child = []
 
         self.is_terminal = token_info[0]  # 是否是终结符，即叶子节点，值为True或False
         self.value = token_info[1]  # 节点的值，即字符串，如'abcd'
@@ -67,7 +71,7 @@ class GrammarTree:
             'factor': 34
         }
 
-    def insert_node(self, nodes):
+    def insert_node(self, nodes):   # 插入节点
         # 当前节点为e
         if not nodes:
             self.grammar_tree[self.next_id] = TreeNode(self.next_id, self.current_node)
@@ -98,11 +102,11 @@ class GrammarTree:
                         self.current_node = 0
                         break
 
-    def output(self):
+    def output(self):   # 打印全部节点信息
         print("语法树：")
         print("节点个数：" + str(len(self.grammar_tree)))
         print("节点属性：id，记号，字符串，父母id，孩子id，是否为叶子节点，行号，列号，该节点的规约文法序号（叶子节点无规约文法，默认为-1；文法与序号的对应关系见GrammarTree类的production属性）")
-        for i in range(self.next_id):
+        for i in range(len(self.grammar_tree)):
             print('\tid =', self.grammar_tree[i].id, ', token =', self.grammar_tree[i].token,
                   ', value =', self.grammar_tree[i].value, ', parent =', self.grammar_tree[i].parent,
                   ', child :', self.grammar_tree[i].child, ', is_terminal =', self.grammar_tree[i].is_terminal,
@@ -114,4 +118,3 @@ class GrammarTree:
         返回TreeNode
         """
         return self.grammar_tree[self.grammar_tree[node_id].child[child_pos]]
-

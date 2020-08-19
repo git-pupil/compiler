@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 """" ==========================================================================
-# _version_ = "0.3.5" 2020-07-10
+# _version_ = "0.3.6" 2020-08-19
 # _author_  = "杨钊颖"
 #
 # 模块名： 词法分析模块
@@ -46,6 +46,7 @@ key_words = ['and', 'array', 'begin', 'boolean', 'case', 'const', 'div', 'do',
              'downto', 'else', 'end', 'for', 'function', 'if', 'integer',
              'mod', 'not', 'of', 'or', 'procedure', 'program', 'real',
              'record', 'repeat', 'then', 'to', 'type', 'until', 'var', 'while',
+             'write', 'read'
              ]
 
 # 逻辑算符
@@ -160,15 +161,38 @@ def _is_analyse_correct(word_analyse_result):
     # @param            词法分析结果
     # @return{void}     如果词法分析结果存在错误，则会在控制台打印错误信息，否则无事发生
     ======================================================================= """
+
+    # by zhicheng lee ->
     flag = True
 
     for word_info in word_analyse_result:
         # 如果存在错误，打印错误信息
         if not word_info[0]:
-            print("第{}行第{}列,\t\t\"{}\",\t\t{}".format(
-                word_info[3], word_info[4], word_info[1], word_info[2]
-            ))
-            flag = False
+            flag=False
+
+    if not flag:
+        print("词法分析错误")
+        for word_info in word_analyse_result:
+            # 如果存在错误，打印错误信息
+            if not word_info[0]:
+                print("第{}行第{}列,\t\t\"{}\",\t\t{}".format(
+                    word_info[3], word_info[4], word_info[1], word_info[2]
+                ))
+                flag = False
+        exit(1)
+    else:
+        print("词法分析正确")
+    # by zhicheng lee <-
+
+    # flag = True
+    #
+    # for word_info in word_analyse_result:
+    #     # 如果存在错误，打印错误信息
+    #     if not word_info[0]:
+    #         print("第{}行第{}列,\t\t\"{}\",\t\t{}".format(
+    #             word_info[3], word_info[4], word_info[1], word_info[2]
+    #         ))
+    #         flag = False
 
     if flag:
         # 完成遍历没有错误

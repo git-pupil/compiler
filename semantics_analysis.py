@@ -515,7 +515,9 @@ class SemanticAnalyzer:
         variable_list = []
         if len(current_node.child) == 3:
             variable_list = self.variable_list(current_node.child[0])
-        result = self.variable(current_node.child[2])
+            result = self.variable(current_node.child[2])
+        else:
+            result = self.variable(current_node.child[0])
         if len(result) != 0:
             variable_list.append(result)
         return variable_list
@@ -811,14 +813,14 @@ class SemanticAnalyzer:
             id_node = self.tree.find_child_node(node_id, 0)
             result_item = self.st_manager.search_item(id_node.value, self.st_manager.current_table_name)
             if result_item is not None:
-                result_item.used_row.append(id_node.row)  # TODO:需要将result更新回符号表
+                result_item.used_row.append(id_node.row)
                 if result_item.identifier_type == "function" or result_item.identifier_type == "procedure":
                     expression_list = self.expression_list(current_node.child[2])
                     args = []
                     if len(expression_list) != 0:
                         for expression in expression_list:
                             args.append(expression[1])
-                    return_type = self.st_manager.complare_args(id_node.value, args)  # TODO:comolare_args函数未完成
+                    return_type = self.st_manager.complare_args(id_node.value, args)
                     if not return_type:
                         print("语义错误：第{0}行, 第{1}列: 参数值不匹配".format(id_node.row, id_node.column))  # 在id行报错
                         self.result = False

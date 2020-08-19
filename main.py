@@ -20,8 +20,9 @@ filename=[
     "test/test_var_addr.pas",   # 13
     "test/test_var_declarations.pas",   # 14
     "test/right_example.pas",   # 15
-    "test/grammar_right_1.pas", # 16 语法测试 正例1 - 非常简单，便于测试
-    "test/grammar_right_2.pas"  # 17 语法测试 正例2 - PPT的正确代码示例
+    "test/grammar_right_1.pas",  # 16 语法测试 正例1 - 非常简单，便于测试
+    "test/grammar_right_2.pas",  # 17 语法测试 正例2 - PPT的正确代码示例
+    "test/semantics_right.pas"  # 18
 ]
 
 result = word_analyse(filename[15])
@@ -35,4 +36,6 @@ grammar_tree=grammar_analyse(result)
 sematic = SemanticAnalyzer(grammar_tree)
 sematic.programstruct()
 
+if sematic.result:
+    print('语义分析正确')
 sematic.st_manager.output_table_item()
