@@ -494,6 +494,7 @@ class SemanticAnalyzer:
                 print("语义错误：第{0}行, 第{1}列: 不能给非变量{2}赋值".format(id_node.row, id_node.column, id_node.value))
                 self.result = False
             elif len(return_type1) != 0 and len(return_type2) != 0:
+
                 result_item.used_row.append(id_node.row)  # TODO:缺少存入步骤
                 if result_item.value_type == "integer" and return_type1[1] == "integer" \
                         and return_type2[1] == "integer":
@@ -533,7 +534,7 @@ class SemanticAnalyzer:
         current_item = self.st_manager.search_item(id_node.value,
                                                    self.st_manager.current_table_name)
         if current_item is not None:
-            current_item.used_row.append(id_node.row)  # TODO:缺少保存过程
+            current_item.used_row.append(id_node.row)
             index = self.id_varpart(current_node.child[1])  # TODO:如果要进行数组越界检查，需要传回表达式的值
             if current_item.identifier_type == "array":
                 if isinstance(index, int):
@@ -624,11 +625,11 @@ class SemanticAnalyzer:
             expression_list = self.expression_list(current_node.child[0])
             result = self.expression(current_node.child[2])
             if len(result) != 0:
-                expression_list.append(self.expression(current_node.child[2]))
+                expression_list.append(result)
         else:
             result = self.expression(current_node.child[0])
             if len(result) != 0:
-                expression_list.append(self.expression(current_node.child[0]))
+                expression_list.append(result)
         return expression_list
 
     def expression(self, node_id):
@@ -659,6 +660,7 @@ class SemanticAnalyzer:
                     self.result = False
 
         elif len(current_node.child) == 1:
+
             expression = self.simple_expression(current_node.child[0])
 
         return expression
@@ -714,6 +716,7 @@ class SemanticAnalyzer:
                         self.result = False
 
         elif len(current_node.child) == 1:
+
             simple_expression = self.term(current_node.child[0])
 
         return simple_expression
@@ -796,6 +799,7 @@ class SemanticAnalyzer:
             elif child_node.token == "real_num":
                 factor = ["expression", "real", child_node.row, child_node.column]
             elif child_node.token == "variable":
+
                 variable = self.variable(child_node.id)
                 if len(variable) != 0:
                     if variable[1] == "array":
@@ -815,6 +819,7 @@ class SemanticAnalyzer:
             if result_item is not None:
                 result_item.used_row.append(id_node.row)
                 if result_item.identifier_type == "function" or result_item.identifier_type == "procedure":
+
                     expression_list = self.expression_list(current_node.child[2])
                     args = []
                     if len(expression_list) != 0:
