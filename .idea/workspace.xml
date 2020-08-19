@@ -19,10 +19,10 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="47122d0c-8838-4dda-af67-3985dd42e287" name="Default Changelist" comment="更新了模块，在快速排序的语义分析阶段出现bug">
+    <list default="true" id="47122d0c-8838-4dda-af67-3985dd42e287" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/semantics_analysis.py" beforeDir="false" afterPath="$PROJECT_DIR$/semantics_analysis.py" afterDir="false" />
     </list>
+    <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -74,17 +74,26 @@
   </component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
-      <recent name="D:\Project\PycharmProjects\semantics-analysis" />
       <recent name="E:\PycharmProjects\compiler" />
       <recent name="E:\PycharmProjects\compiler\venv\Include" />
     </key>
     <key name="CopyFile.RECENT_KEYS">
-      <recent name="D:\Project\PycharmProjects\semantics-analysis" />
-      <recent name="D:\Project\PycharmProjects\semantics-analysis\test" />
       <recent name="E:\PycharmProjects\compiler" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.main">
+  <component name="RunDashboard">
+    <option name="ruleStates">
+      <list>
+        <RuleState>
+          <option name="name" value="ConfigurationTypeDashboardGroupingRule" />
+        </RuleState>
+        <RuleState>
+          <option name="name" value="StatusDashboardGroupingRule" />
+        </RuleState>
+      </list>
+    </option>
+  </component>
+  <component name="RunManager">
     <configuration name="Sematic" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <module name="compiler" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -107,33 +116,6 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="main" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
-      <module name="compiler" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/main.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <option name="EMULATE_TERMINAL" value="false" />
-      <option name="MODULE_MODE" value="false" />
-      <option name="REDIRECT_INPUT" value="false" />
-      <option name="INPUT_FILE" value="" />
-      <method v="2" />
-    </configuration>
-    <recent_temporary>
-      <list>
-        <item itemvalue="Python.main" />
-      </list>
-    </recent_temporary>
   </component>
   <component name="SvnConfiguration">
     <configuration />
@@ -179,16 +161,8 @@
       <workItem from="1595052363719" duration="3400000" />
       <workItem from="1596125499234" duration="7297000" />
       <workItem from="1596287982044" duration="1426000" />
-      <workItem from="1597319610915" duration="264000" />
-      <workItem from="1597320554991" duration="167000" />
-      <workItem from="1597320741569" duration="54000" />
-      <workItem from="1597363527692" duration="6677000" />
-      <workItem from="1597395818276" duration="2266000" />
-      <workItem from="1597534958093" duration="103000" />
-      <workItem from="1597796267516" duration="5450000" />
-      <workItem from="1597814539952" duration="6869000" />
-      <workItem from="1597829777527" duration="250000" />
-      <workItem from="1597830047676" duration="8346000" />
+      <workItem from="1597248740598" duration="75000" />
+      <workItem from="1597846801779" duration="649000" />
     </task>
     <task id="LOCAL-00001" summary="增加了变量声明部分的符号表建立操作">
       <created>1594260792066</created>
@@ -267,42 +241,20 @@
       <option name="project" value="LOCAL" />
       <updated>1596289724188</updated>
     </task>
-    <task id="LOCAL-00012" summary="进行了初步测试">
-      <created>1597534997704</created>
+    <task id="LOCAL-00012" summary="修改了符号表">
+      <created>1597248766656</created>
       <option name="number" value="00012" />
       <option name="presentableId" value="LOCAL-00012" />
       <option name="project" value="LOCAL" />
-      <updated>1597534997704</updated>
+      <updated>1597248766656</updated>
     </task>
-    <task id="LOCAL-00013" summary="更新了最新的词法、语法分析模块">
-      <created>1597816521686</created>
-      <option name="number" value="00013" />
-      <option name="presentableId" value="LOCAL-00013" />
-      <option name="project" value="LOCAL" />
-      <updated>1597816521686</updated>
-    </task>
-    <task id="LOCAL-00014" summary="修改了多次添加同一使用行的bug">
-      <created>1597820076119</created>
-      <option name="number" value="00014" />
-      <option name="presentableId" value="LOCAL-00014" />
-      <option name="project" value="LOCAL" />
-      <updated>1597820076119</updated>
-    </task>
-    <task id="LOCAL-00015" summary="更新了模块，在快速排序的语义分析阶段出现bug">
-      <created>1597838252513</created>
-      <option name="number" value="00015" />
-      <option name="presentableId" value="LOCAL-00015" />
-      <option name="project" value="LOCAL" />
-      <updated>1597838252513</updated>
-    </task>
-    <option name="localTasksCounter" value="16" />
+    <option name="localTasksCounter" value="13" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
-    <option name="version" value="2" />
+    <option name="version" value="1" />
   </component>
   <component name="UnknownFeatures">
-    <option featureType="com.intellij.fileTypeFactory" implementationName="*.pas" />
     <option featureType="com.intellij.fileTypeFactory" implementationName="*.py" />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -310,12 +262,13 @@
       <map>
         <entry key="MAIN">
           <value>
-            <State />
+            <State>
+              <option name="COLUMN_ORDER" />
+            </State>
           </value>
         </entry>
       </map>
     </option>
-    <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="增加了变量声明部分的符号表建立操作" />
@@ -327,61 +280,13 @@
     <MESSAGE value="基本完成了所有函数，后续会进行检查及补充未进行的语义错误分析" />
     <MESSAGE value="修改了符号表引入的错误" />
     <MESSAGE value="修改了符号表" />
-    <MESSAGE value="进行了初步测试" />
-    <MESSAGE value="更新了最新的词法、语法分析模块" />
-    <MESSAGE value="修改了多次添加同一使用行的bug" />
-    <MESSAGE value="更新了模块，在快速排序的语义分析阶段出现bug" />
-    <option name="LAST_COMMIT_MESSAGE" value="更新了模块，在快速排序的语义分析阶段出现bug" />
+    <option name="LAST_COMMIT_MESSAGE" value="修改了符号表" />
   </component>
   <component name="WindowStateProjectService">
-    <state x="223" y="87" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1597319774485">
-      <screen x="0" y="0" width="1536" height="864" />
-    </state>
-    <state x="223" y="87" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1536.864@0.0.1536.864" timestamp="1597319774485" />
-    <state x="476" y="233" key="#com.intellij.fileTypes.FileTypeChooser" timestamp="1597815502905">
-      <screen x="0" y="0" width="1536" height="864" />
-    </state>
-    <state x="476" y="233" key="#com.intellij.fileTypes.FileTypeChooser/0.0.1536.864@0.0.1536.864" timestamp="1597815502905" />
-    <state x="93" y="93" width="1350" height="678" key="DiffContextDialog" timestamp="1597319877687">
-      <screen x="0" y="0" width="1536" height="864" />
-    </state>
-    <state x="93" y="93" width="1350" height="678" key="DiffContextDialog/0.0.1536.864@0.0.1536.864" timestamp="1597319877687" />
     <state x="549" y="166" key="FileChooserDialogImpl" timestamp="1594448461327">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
     <state x="549" y="166" key="FileChooserDialogImpl/0.0.1536.824@0.0.1536.824" timestamp="1594448461327" />
-    <state width="1493" height="404" key="GridCell.Tab.0.bottom" timestamp="1597839540599">
-      <screen x="0" y="0" width="1536" height="864" />
-    </state>
-    <state width="1493" height="404" key="GridCell.Tab.0.bottom/0.0.1536.864@0.0.1536.864" timestamp="1597839540599" />
-    <state width="1493" height="404" key="GridCell.Tab.0.center" timestamp="1597839540599">
-      <screen x="0" y="0" width="1536" height="864" />
-    </state>
-    <state width="1493" height="404" key="GridCell.Tab.0.center/0.0.1536.864@0.0.1536.864" timestamp="1597839540599" />
-    <state width="1493" height="404" key="GridCell.Tab.0.left" timestamp="1597839540599">
-      <screen x="0" y="0" width="1536" height="864" />
-    </state>
-    <state width="1493" height="404" key="GridCell.Tab.0.left/0.0.1536.864@0.0.1536.864" timestamp="1597839540599" />
-    <state width="1493" height="404" key="GridCell.Tab.0.right" timestamp="1597839540599">
-      <screen x="0" y="0" width="1536" height="864" />
-    </state>
-    <state width="1493" height="404" key="GridCell.Tab.0.right/0.0.1536.864@0.0.1536.864" timestamp="1597839540599" />
-    <state width="1493" height="277" key="GridCell.Tab.1.bottom" timestamp="1597831196659">
-      <screen x="0" y="0" width="1536" height="864" />
-    </state>
-    <state width="1493" height="277" key="GridCell.Tab.1.bottom/0.0.1536.864@0.0.1536.864" timestamp="1597831196659" />
-    <state width="1493" height="277" key="GridCell.Tab.1.center" timestamp="1597831196658">
-      <screen x="0" y="0" width="1536" height="864" />
-    </state>
-    <state width="1493" height="277" key="GridCell.Tab.1.center/0.0.1536.864@0.0.1536.864" timestamp="1597831196658" />
-    <state width="1493" height="277" key="GridCell.Tab.1.left" timestamp="1597831196658">
-      <screen x="0" y="0" width="1536" height="864" />
-    </state>
-    <state width="1493" height="277" key="GridCell.Tab.1.left/0.0.1536.864@0.0.1536.864" timestamp="1597831196658" />
-    <state width="1493" height="277" key="GridCell.Tab.1.right" timestamp="1597831196659">
-      <screen x="0" y="0" width="1536" height="864" />
-    </state>
-    <state width="1493" height="277" key="GridCell.Tab.1.right/0.0.1536.864@0.0.1536.864" timestamp="1597831196659" />
     <state x="387" y="157" width="996" height="707" key="SettingsEditor" timestamp="1594863128496">
       <screen x="0" y="0" width="1536" height="864" />
     </state>
@@ -391,16 +296,13 @@
       <screen x="0" y="0" width="1536" height="864" />
     </state>
     <state width="498" height="446" key="SwitcherDM/0.0.1536.864@0.0.1536.864" timestamp="1595054185821" />
-    <state x="211" y="395" width="409" height="202" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1597816486825">
+    <state x="211" y="395" width="409" height="202" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1594688412055">
       <screen x="0" y="0" width="1536" height="864" />
     </state>
-    <state x="211" y="395" width="409" height="202" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.0.1536.864@0.0.1536.864" timestamp="1597816486825" />
+    <state x="211" y="395" width="409" height="202" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.0.1536.864@0.0.1536.864" timestamp="1594688412055" />
     <state x="565" y="479" width="672" height="520" key="search.everywhere.popup" timestamp="1594862867600">
       <screen x="0" y="0" width="1536" height="864" />
     </state>
     <state x="565" y="479" width="672" height="520" key="search.everywhere.popup/0.0.1536.864@0.0.1536.864" timestamp="1594862867600" />
-  </component>
-  <component name="com.intellij.coverage.CoverageDataManagerImpl">
-    <SUITE FILE_PATH="coverage/semantics_analysis$main.coverage" NAME="main Coverage Results" MODIFIED="1597839540591" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
   </component>
 </project>
