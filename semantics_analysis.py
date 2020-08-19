@@ -188,7 +188,6 @@ class SemanticAnalyzer:
                 new_item = Item(parameter.name, item_info[0], item_info[1],
                                 None, None, None, parameter.row, [])
                 if not self.st_manager.insert_item(new_item, self.st_manager.current_table_name):
-                    print(current_node.id)
                     print("语义错误：第{0}行, 第{1}列: {2}重定义或该符号表不存在".format(parameter.row, parameter.column, parameter.name))
                     self.result = False
         else:  # var_declaration → var_declaration ; idlist : type{insert_item()}
@@ -282,6 +281,7 @@ class SemanticAnalyzer:
         if len(current_node.child) == 3:
             self.subprogram_declarations(current_node.child[0])
             self.subprogram(current_node.child[1])
+            self.st_manager.relocate()
 
     def subprogram(self, node_id):
         """
@@ -597,13 +597,15 @@ class SemanticAnalyzer:
                 print('语义错误：第{0}行, 第{1}列: 该过程或函数需要参数'.format(id_node.row, id_node.column))
                 self.result = False
             elif len(current_node.child) == 4:
-                if len(result_item.arguments) != 0:
+                if len(result_item.parameter_list) != 0:
                     expression_list = self.expression_list(current_node.child[2])
                     if len(expression_list) != 0:
                         args = []
                         for item in expression_list:
                             args.append(item[1])
                         if not self.st_manager.complare_args(id_node.value, args):  # 判断是否参数列表的个数与类型是否符合
+                            print(id_node.value)
+                            print(args)
                             print('语义错误：第{0}行, 第{1}列: 形参、实参不匹配'.format(id_node.row, id_node.column))
                             self.result = False
                     else:

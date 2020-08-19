@@ -19,13 +19,9 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="47122d0c-8838-4dda-af67-3985dd42e287" name="Default Changelist" comment="修改了多次添加同一使用行的bug">
+    <list default="true" id="47122d0c-8838-4dda-af67-3985dd42e287" name="Default Changelist" comment="更新了模块，在快速排序的语义分析阶段出现bug">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/grammar_analyse.py" beforeDir="false" afterPath="$PROJECT_DIR$/grammar_analyse.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/semantics_analysis.py" beforeDir="false" afterPath="$PROJECT_DIR$/semantics_analysis.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test/quicksort.pas" beforeDir="false" afterPath="$PROJECT_DIR$/test/quicksort.pas" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test/semantics_err1.pas" beforeDir="false" afterPath="$PROJECT_DIR$/test/semantics_err1.pas" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -192,7 +188,7 @@
       <workItem from="1597796267516" duration="5450000" />
       <workItem from="1597814539952" duration="6869000" />
       <workItem from="1597829777527" duration="250000" />
-      <workItem from="1597830047676" duration="6771000" />
+      <workItem from="1597830047676" duration="8346000" />
     </task>
     <task id="LOCAL-00001" summary="增加了变量声明部分的符号表建立操作">
       <created>1594260792066</created>
@@ -292,7 +288,14 @@
       <option name="project" value="LOCAL" />
       <updated>1597820076119</updated>
     </task>
-    <option name="localTasksCounter" value="15" />
+    <task id="LOCAL-00015" summary="更新了模块，在快速排序的语义分析阶段出现bug">
+      <created>1597838252513</created>
+      <option name="number" value="00015" />
+      <option name="presentableId" value="LOCAL-00015" />
+      <option name="project" value="LOCAL" />
+      <updated>1597838252513</updated>
+    </task>
+    <option name="localTasksCounter" value="16" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -327,7 +330,8 @@
     <MESSAGE value="进行了初步测试" />
     <MESSAGE value="更新了最新的词法、语法分析模块" />
     <MESSAGE value="修改了多次添加同一使用行的bug" />
-    <option name="LAST_COMMIT_MESSAGE" value="修改了多次添加同一使用行的bug" />
+    <MESSAGE value="更新了模块，在快速排序的语义分析阶段出现bug" />
+    <option name="LAST_COMMIT_MESSAGE" value="更新了模块，在快速排序的语义分析阶段出现bug" />
   </component>
   <component name="WindowStateProjectService">
     <state x="223" y="87" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1597319774485">
@@ -346,22 +350,22 @@
       <screen x="0" y="0" width="1536" height="824" />
     </state>
     <state x="549" y="166" key="FileChooserDialogImpl/0.0.1536.824@0.0.1536.824" timestamp="1594448461327" />
-    <state width="1478" height="212" key="GridCell.Tab.0.bottom" timestamp="1597837859400">
+    <state width="1493" height="404" key="GridCell.Tab.0.bottom" timestamp="1597839540599">
       <screen x="0" y="0" width="1536" height="864" />
     </state>
-    <state width="1478" height="212" key="GridCell.Tab.0.bottom/0.0.1536.864@0.0.1536.864" timestamp="1597837859400" />
-    <state width="1478" height="212" key="GridCell.Tab.0.center" timestamp="1597837859400">
+    <state width="1493" height="404" key="GridCell.Tab.0.bottom/0.0.1536.864@0.0.1536.864" timestamp="1597839540599" />
+    <state width="1493" height="404" key="GridCell.Tab.0.center" timestamp="1597839540599">
       <screen x="0" y="0" width="1536" height="864" />
     </state>
-    <state width="1478" height="212" key="GridCell.Tab.0.center/0.0.1536.864@0.0.1536.864" timestamp="1597837859400" />
-    <state width="1478" height="212" key="GridCell.Tab.0.left" timestamp="1597837859400">
+    <state width="1493" height="404" key="GridCell.Tab.0.center/0.0.1536.864@0.0.1536.864" timestamp="1597839540599" />
+    <state width="1493" height="404" key="GridCell.Tab.0.left" timestamp="1597839540599">
       <screen x="0" y="0" width="1536" height="864" />
     </state>
-    <state width="1478" height="212" key="GridCell.Tab.0.left/0.0.1536.864@0.0.1536.864" timestamp="1597837859400" />
-    <state width="1478" height="212" key="GridCell.Tab.0.right" timestamp="1597837859400">
+    <state width="1493" height="404" key="GridCell.Tab.0.left/0.0.1536.864@0.0.1536.864" timestamp="1597839540599" />
+    <state width="1493" height="404" key="GridCell.Tab.0.right" timestamp="1597839540599">
       <screen x="0" y="0" width="1536" height="864" />
     </state>
-    <state width="1478" height="212" key="GridCell.Tab.0.right/0.0.1536.864@0.0.1536.864" timestamp="1597837859400" />
+    <state width="1493" height="404" key="GridCell.Tab.0.right/0.0.1536.864@0.0.1536.864" timestamp="1597839540599" />
     <state width="1493" height="277" key="GridCell.Tab.1.bottom" timestamp="1597831196659">
       <screen x="0" y="0" width="1536" height="864" />
     </state>
@@ -397,6 +401,6 @@
     <state x="565" y="479" width="672" height="520" key="search.everywhere.popup/0.0.1536.864@0.0.1536.864" timestamp="1594862867600" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
-    <SUITE FILE_PATH="coverage/semantics_analysis$main.coverage" NAME="main Coverage Results" MODIFIED="1597838146820" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/semantics_analysis$main.coverage" NAME="main Coverage Results" MODIFIED="1597839540591" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
   </component>
 </project>
