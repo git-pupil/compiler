@@ -200,7 +200,7 @@ class STManager:
         parameter_type_list = []
         for x in self.all_symbol_table[func_name].parameter_list:  # 获取形参类型列表
             parameter_type_list.append(x.type)
-        result = operator.eq(parameter_type_list, argument_type_list)  # 比较
+        result = operator.eq(parameter_type_list, argument_type_list)  # 形参类型列表和实参类型列表进行比较
         return result
 
     def complare_args(self, func_name='', parameter_list=None):
@@ -213,8 +213,7 @@ class STManager:
             func_type: 该函数的返回值类型(int,bool,None)
             False: 比较失败或符号表中不存在这样的函数名
         """
-        if parameter_list is None:
-            parameter_list = []
+
         parameter_num = len(parameter_list)  # 实参个数
         if func_name in self.all_symbol_table.keys():  # 要比较的函数名在符号表中
             if (self.getpnum(func_name) == parameter_num and  # 实参个数与形参个数一致
