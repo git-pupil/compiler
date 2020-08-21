@@ -19,12 +19,14 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="d6bde687-968f-443e-b7eb-c0816756218b" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_2020_8_13_19_52_[Default_Changelist]/shelved.patch" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_2020_8_13_19_52__Default_Changelist_.xml" beforeDir="false" />
+    <list default="true" id="d6bde687-968f-443e-b7eb-c0816756218b" name="Default Changelist" comment="改正了函数参数判断错误的bug">
+      <change afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_2020_8_21_9_08_[Default_Changelist]/shelved.patch" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_2020_8_21_9_08__Default_Changelist_.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/semantics_analysis.py" beforeDir="false" afterPath="$PROJECT_DIR$/semantics_analysis.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/symbol_table.py" beforeDir="false" afterPath="$PROJECT_DIR$/symbol_table.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/semantics_err1.pas" beforeDir="false" afterPath="$PROJECT_DIR$/test/semantics_err1.pas" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -184,7 +186,7 @@
       <workItem from="1597846801779" duration="649000" />
       <workItem from="1597923589175" duration="2874000" />
       <workItem from="1597972122770" duration="642000" />
-      <workItem from="1597978168057" duration="352000" />
+      <workItem from="1597978168057" duration="2968000" />
     </task>
     <task id="LOCAL-00001" summary="增加了变量声明部分的符号表建立操作">
       <created>1594260792066</created>
@@ -270,7 +272,14 @@
       <option name="project" value="LOCAL" />
       <updated>1597248766656</updated>
     </task>
-    <option name="localTasksCounter" value="13" />
+    <task id="LOCAL-00013" summary="改正了函数参数判断错误的bug">
+      <created>1597978817160</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1597978817160</updated>
+    </task>
+    <option name="localTasksCounter" value="14" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -301,29 +310,30 @@
     <MESSAGE value="基本完成了所有函数，后续会进行检查及补充未进行的语义错误分析" />
     <MESSAGE value="修改了符号表引入的错误" />
     <MESSAGE value="修改了符号表" />
-    <option name="LAST_COMMIT_MESSAGE" value="修改了符号表" />
+    <MESSAGE value="改正了函数参数判断错误的bug" />
+    <option name="LAST_COMMIT_MESSAGE" value="改正了函数参数判断错误的bug" />
   </component>
   <component name="WindowStateProjectService">
     <state x="549" y="166" key="FileChooserDialogImpl" timestamp="1594448461327">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
     <state x="549" y="166" key="FileChooserDialogImpl/0.0.1536.824@0.0.1536.824" timestamp="1594448461327" />
-    <state width="1493" height="248" key="GridCell.Tab.0.bottom" timestamp="1597978770245">
+    <state width="1493" height="327" key="GridCell.Tab.0.bottom" timestamp="1597981369837">
       <screen x="0" y="0" width="1536" height="864" />
     </state>
-    <state width="1493" height="248" key="GridCell.Tab.0.bottom/0.0.1536.864@0.0.1536.864" timestamp="1597978770245" />
-    <state width="1493" height="248" key="GridCell.Tab.0.center" timestamp="1597978770245">
+    <state width="1493" height="327" key="GridCell.Tab.0.bottom/0.0.1536.864@0.0.1536.864" timestamp="1597981369837" />
+    <state width="1493" height="327" key="GridCell.Tab.0.center" timestamp="1597981369837">
       <screen x="0" y="0" width="1536" height="864" />
     </state>
-    <state width="1493" height="248" key="GridCell.Tab.0.center/0.0.1536.864@0.0.1536.864" timestamp="1597978770245" />
-    <state width="1493" height="248" key="GridCell.Tab.0.left" timestamp="1597978770245">
+    <state width="1493" height="327" key="GridCell.Tab.0.center/0.0.1536.864@0.0.1536.864" timestamp="1597981369837" />
+    <state width="1493" height="327" key="GridCell.Tab.0.left" timestamp="1597981369837">
       <screen x="0" y="0" width="1536" height="864" />
     </state>
-    <state width="1493" height="248" key="GridCell.Tab.0.left/0.0.1536.864@0.0.1536.864" timestamp="1597978770245" />
-    <state width="1493" height="248" key="GridCell.Tab.0.right" timestamp="1597978770245">
+    <state width="1493" height="327" key="GridCell.Tab.0.left/0.0.1536.864@0.0.1536.864" timestamp="1597981369837" />
+    <state width="1493" height="327" key="GridCell.Tab.0.right" timestamp="1597981369837">
       <screen x="0" y="0" width="1536" height="864" />
     </state>
-    <state width="1493" height="248" key="GridCell.Tab.0.right/0.0.1536.864@0.0.1536.864" timestamp="1597978770245" />
+    <state width="1493" height="327" key="GridCell.Tab.0.right/0.0.1536.864@0.0.1536.864" timestamp="1597981369837" />
     <state x="387" y="157" width="996" height="707" key="SettingsEditor" timestamp="1594863128496">
       <screen x="0" y="0" width="1536" height="864" />
     </state>
@@ -344,6 +354,6 @@
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/semantics_analysis$Sematic.coverage" NAME="Sematic Coverage Results" MODIFIED="1597972131468" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
-    <SUITE FILE_PATH="coverage/semantics_analysis$main.coverage" NAME="main Coverage Results" MODIFIED="1597978770235" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/semantics_analysis$main.coverage" NAME="main Coverage Results" MODIFIED="1597981369828" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
   </component>
 </project>

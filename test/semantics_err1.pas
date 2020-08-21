@@ -1,5 +1,5 @@
 program example(input,output);
-var x,y:integer; x,z : real; test4 : boolean; abs : array[0..4] of integer; abd : array[20..10] of integer; {wrong 3}
+var x,y:integer; x,z : real; test4 : boolean; abs : array[0..4] of integer; abd : array[20..10] of integer; {wrong 2}
 function gcd(a,b:integer):integer;
 var abc : array[0..6] of integer;
 begin
@@ -13,10 +13,9 @@ test4 := test4 + 1; {cannot + }
 test4 := x or z; {cannot or}
 test4 := test4*test4; {cannot mulop}
 z := not z; {cannot not}
-z := uminus test4; {cannot uminus}
 abc := 1; {wrong}
 abc[1.2] := 1; {wrong}
-if b then gcd:=a  { if A then B, a is bool}
+if b then gcd:=a  { if A then B, A is bool}
 else gcd:=gcd(b, a mod b)
 end;
 begin

@@ -184,22 +184,24 @@ class SemanticAnalyzer:
         if len(current_node.child) == 3:  # var_declaration → idlist : type{insert_item()}
             parameter_list = self.idlist(current_node.child[0])
             item_info = self.type(current_node.child[2])
-            for parameter in parameter_list:
-                new_item = Item(parameter.name, item_info[0], item_info[1],
-                                None, None, None, parameter.row, [])
-                if not self.st_manager.insert_item(new_item, self.st_manager.current_table_name):
-                    print("语义错误：第{0}行, 第{1}列: {2}重定义或该符号表不存在".format(parameter.row, parameter.column, parameter.name))
-                    self.result = False
+            if len(item_info) > 0 and item_info[0] is not None and len(parameter_list) > 0:
+                for parameter in parameter_list:
+                    new_item = Item(parameter.name, item_info[0], item_info[1],
+                                    None, None, None, parameter.row, [])
+                    if not self.st_manager.insert_item(new_item, self.st_manager.current_table_name):
+                        print("语义错误：第{0}行, 第{1}列: {2}重定义或该符号表不存在".format(parameter.row, parameter.column, parameter.name))
+                        self.result = False
         else:  # var_declaration → var_declaration ; idlist : type{insert_item()}
             self.var_declaration(current_node.child[0])
             parameter_list = self.idlist(current_node.child[2])
             item_info = self.type(current_node.child[4])
-            for parameter in parameter_list:
-                new_item = Item(parameter.name, item_info[0], item_info[1],
-                                None, item_info[3], item_info[2][1], parameter.row, [])
-                if not self.st_manager.insert_item(new_item, self.st_manager.current_table_name):
-                    print("语义错误：第{0}行, 第{1}列: {2}重定义或该符号表不存在".format(parameter.row, parameter.column, parameter.name))
-                    self.result = False
+            if len(item_info) > 0 and item_info[0] is not None and len(parameter_list) > 0:
+                for parameter in parameter_list:
+                    new_item = Item(parameter.name, item_info[0], item_info[1],
+                                    None, item_info[3], item_info[2][1], parameter.row, [])
+                    if not self.st_manager.insert_item(new_item, self.st_manager.current_table_name):
+                        print("语义错误：第{0}行, 第{1}列: {2}重定义或该符号表不存在".format(parameter.row, parameter.column, parameter.name))
+                        self.result = False
 
     def type(self, node_id):
         """

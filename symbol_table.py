@@ -124,7 +124,7 @@ class STManager:
             False：失败
         """
         if self.is_redefined(item.name, table_name):  # 存在重名
-            print('存在重名表项')
+            # print('存在重名表项')
             return False  # 插入失败
         else:  # 要插入的表中该变量名未定义
             self.all_symbol_table[table_name].item_list.append(item)
