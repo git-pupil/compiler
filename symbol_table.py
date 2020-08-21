@@ -217,7 +217,7 @@ class STManager:
         parameter_num = len(parameter_list)  # 实参个数
         if func_name in self.all_symbol_table.keys():  # 要比较的函数名在符号表中
             if (self.getpnum(func_name) == parameter_num and  # 实参个数与形参个数一致
-                    self.checkptype(func_name, parameter_list) == True):  # 实参类型与形参类型一致
+                    self.checkptype(func_name, parameter_list) is True):  # 实参类型与形参类型一致
                 return self.getfunc_type(func_name)  # 返回函数的返回值类型:None,int,bool...
             else:  # 否则视为类型错误
                 return False

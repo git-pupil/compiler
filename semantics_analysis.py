@@ -505,7 +505,6 @@ class SemanticAnalyzer:
                 print("语义错误：第{0}行, 第{1}列: 不能给非变量{2}赋值".format(id_node.row, id_node.column, id_node.value))
                 self.result = False
             elif len(return_type1) != 0 and len(return_type2) != 0:
-
                 result_item.used_row.append(id_node.row)
                 if result_item.value_type == "integer" and return_type1[1] == "integer" \
                         and return_type2[1] == "integer":
@@ -569,7 +568,6 @@ class SemanticAnalyzer:
         id_varpart → ε
         """
         current_node = self.tree.grammar_tree[node_id]
-        index = None
         if len(current_node.child) == 3:
             expression_list = self.expression_list(current_node.child[1])
             if len(expression_list) == 1:
@@ -603,9 +601,7 @@ class SemanticAnalyzer:
                         args = []
                         for item in expression_list:
                             args.append(item[1])
-                        if not self.st_manager.complare_args(id_node.value, args):  # 判断是否参数列表的个数与类型是否符合
-                            print(id_node.value)
-                            print(args)
+                        if self.st_manager.complare_args(id_node.value, args) is False:  # 判断是否参数列表的个数与类型是否符合
                             print('语义错误：第{0}行, 第{1}列: 形参、实参不匹配'.format(id_node.row, id_node.column))
                             self.result = False
                     else:
@@ -837,7 +833,7 @@ class SemanticAnalyzer:
                         for expression in expression_list:
                             args.append(expression[1])
                     return_type = self.st_manager.complare_args(id_node.value, args)
-                    if not return_type:
+                    if return_type is False:
                         print("语义错误：第{0}行, 第{1}列: 参数值不匹配".format(id_node.row, id_node.column))  # 在id行报错
                         self.result = False
                     else:
