@@ -15,6 +15,7 @@ test4 := test4*test4; {cannot mulop}
 z := not z; {cannot not}
 abc := 1; {wrong}
 abc[1.2] := 1; {wrong}
+abc[1, 2] := 1; {wrong}
 if b then gcd:=a  { if A then B, A is bool}
 else gcd:=gcd(b, a mod b)
 end;

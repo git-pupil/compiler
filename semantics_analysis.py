@@ -548,6 +548,7 @@ class SemanticAnalyzer:
                                                    self.st_manager.current_table_name)
         if current_item is not None:
             current_item.used_row.append(id_node.row)
+            expression_list = self.id_varpart(current_node.child[1])
             if current_item.identifier_type == "array":
                 if len(child_id_varpart_node.child) == 3:
                     variable = [current_item.name, "array", id_node.row, id_node.column, current_item.value_type]
@@ -570,12 +571,17 @@ class SemanticAnalyzer:
         id_varpart → ε
         """
         current_node = self.tree.grammar_tree[node_id]
+        expression_list = []
         if len(current_node.child) == 3:
             expression_list = self.expression_list(current_node.child[1])
             if len(expression_list) == 1:
                 if expression_list[0][1] != "integer":
                     print('语义错误：第{0}行: 数组下标应该为integer'.format(expression_list[0][2]))
                     self.result = False
+            else:
+                print('语义错误：第{0}行: 数组下标应该为单个整数'.format(expression_list[0][2]))
+                self.result = False
+        return expression_list
 
     def procedure_call(self, node_id):
         """
@@ -797,7 +803,8 @@ class SemanticAnalyzer:
         factor → uminus factor {factor.type = factor1.type}
         返回[id, type, row, column, value] or [expression, return_type, None, None, None]
 
-        factor → int_num | real_num | variable | id ( expression_list ) | ( expression ) | not factor | uminus factor  # 进行了修改
+        factor → int_num | real_num | variable | id ( expression_list ) |
+                                        ( expression ) | not factor | uminus factor  # 进行了修改
         """
         factor = []
         current_node = self.tree.grammar_tree[node_id]
