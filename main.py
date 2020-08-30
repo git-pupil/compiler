@@ -2,6 +2,7 @@ from wordanalyse import word_analyse
 from grammar_analyse import grammar_analyse
 from semantics_analysis import *
 from symbol_table import *
+from code_generation import *
 
 filename=[
     "test/word_analyse_test1", # 词法分析 用于测试数字读取
@@ -40,3 +41,6 @@ sematic.programstruct()
 if sematic.result:
     print('语义分析正确')
 sematic.st_manager.output_table_item()
+
+print('代码生成如下:')
+code_generetion = CodeGeneration(grammar_tree, sematic)

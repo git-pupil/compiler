@@ -20,9 +20,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="d6bde687-968f-443e-b7eb-c0816756218b" name="Default Changelist" comment="对语义分析进行了测试，目前发现了数组下标错误无法检测到的bug">
+      <change afterPath="$PROJECT_DIR$/code_generation.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_2020_8_21_9_08_[Default_Changelist]/shelved.patch" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_2020_8_21_9_08__Default_Changelist_.xml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/semantics_analysis.py" beforeDir="false" afterPath="$PROJECT_DIR$/semantics_analysis.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test/semantics_err1.pas" beforeDir="false" afterPath="$PROJECT_DIR$/test/semantics_err1.pas" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -112,9 +114,9 @@
       <envs>
         <env name="PYTHONUNBUFFERED" value="1" />
       </envs>
-      <option name="SDK_HOME" value="" />
+      <option name="SDK_HOME" value="C:\Users\18367\Anaconda3\python.exe" />
       <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
-      <option name="IS_MODULE_SDK" value="true" />
+      <option name="IS_MODULE_SDK" value="false" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
@@ -297,12 +299,13 @@
       <map>
         <entry key="MAIN">
           <value>
-            <State />
+            <State>
+              <option name="COLUMN_ORDER" />
+            </State>
           </value>
         </entry>
       </map>
     </option>
-    <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="增加了变量声明部分的符号表建立操作" />
@@ -319,25 +322,41 @@
     <option name="LAST_COMMIT_MESSAGE" value="对语义分析进行了测试，目前发现了数组下标错误无法检测到的bug" />
   </component>
   <component name="WindowStateProjectService">
+    <state x="96" y="0" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1598762219965">
+      <screen x="0" y="0" width="1280" height="680" />
+    </state>
+    <state x="96" y="0" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1280.680@0.0.1280.680" timestamp="1598762219965" />
+    <state x="358" y="0" key="#main" timestamp="1598762277735">
+      <screen x="0" y="0" width="1280" height="680" />
+    </state>
+    <state x="358" y="0" key="#main/0.0.1280.680@0.0.1280.680" timestamp="1598762277735" />
+    <state x="194" y="0" key="CommitChangelistDialog2" timestamp="1598763153054">
+      <screen x="0" y="0" width="1280" height="680" />
+    </state>
+    <state x="194" y="0" key="CommitChangelistDialog2/0.0.1280.680@0.0.1280.680" timestamp="1598763153054" />
     <state x="549" y="166" key="FileChooserDialogImpl" timestamp="1594448461327">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
     <state x="549" y="166" key="FileChooserDialogImpl/0.0.1536.824@0.0.1536.824" timestamp="1594448461327" />
-    <state width="1493" height="343" key="GridCell.Tab.0.bottom" timestamp="1598253412569">
-      <screen x="0" y="0" width="1536" height="864" />
+    <state width="1259" height="247" key="GridCell.Tab.0.bottom" timestamp="1598763153080">
+      <screen x="0" y="0" width="1280" height="680" />
     </state>
+    <state width="1259" height="247" key="GridCell.Tab.0.bottom/0.0.1280.680@0.0.1280.680" timestamp="1598763153080" />
     <state width="1493" height="343" key="GridCell.Tab.0.bottom/0.0.1536.864@0.0.1536.864" timestamp="1598253412569" />
-    <state width="1493" height="343" key="GridCell.Tab.0.center" timestamp="1598253412569">
-      <screen x="0" y="0" width="1536" height="864" />
+    <state width="1259" height="247" key="GridCell.Tab.0.center" timestamp="1598763153080">
+      <screen x="0" y="0" width="1280" height="680" />
     </state>
+    <state width="1259" height="247" key="GridCell.Tab.0.center/0.0.1280.680@0.0.1280.680" timestamp="1598763153080" />
     <state width="1493" height="343" key="GridCell.Tab.0.center/0.0.1536.864@0.0.1536.864" timestamp="1598253412569" />
-    <state width="1493" height="343" key="GridCell.Tab.0.left" timestamp="1598253412569">
-      <screen x="0" y="0" width="1536" height="864" />
+    <state width="1259" height="247" key="GridCell.Tab.0.left" timestamp="1598763153079">
+      <screen x="0" y="0" width="1280" height="680" />
     </state>
+    <state width="1259" height="247" key="GridCell.Tab.0.left/0.0.1280.680@0.0.1280.680" timestamp="1598763153079" />
     <state width="1493" height="343" key="GridCell.Tab.0.left/0.0.1536.864@0.0.1536.864" timestamp="1598253412569" />
-    <state width="1493" height="343" key="GridCell.Tab.0.right" timestamp="1598253412569">
-      <screen x="0" y="0" width="1536" height="864" />
+    <state width="1259" height="247" key="GridCell.Tab.0.right" timestamp="1598763153080">
+      <screen x="0" y="0" width="1280" height="680" />
     </state>
+    <state width="1259" height="247" key="GridCell.Tab.0.right/0.0.1280.680@0.0.1280.680" timestamp="1598763153080" />
     <state width="1493" height="343" key="GridCell.Tab.0.right/0.0.1536.864@0.0.1536.864" timestamp="1598253412569" />
     <state x="387" y="157" width="996" height="707" key="SettingsEditor" timestamp="1594863128496">
       <screen x="0" y="0" width="1536" height="864" />
@@ -348,6 +367,10 @@
       <screen x="0" y="0" width="1536" height="864" />
     </state>
     <state width="498" height="446" key="SwitcherDM/0.0.1536.864@0.0.1536.864" timestamp="1595054185821" />
+    <state x="337" y="169" key="com.intellij.ide.util.TipDialog" timestamp="1598762252134">
+      <screen x="0" y="0" width="1280" height="680" />
+    </state>
+    <state x="337" y="169" key="com.intellij.ide.util.TipDialog/0.0.1280.680@0.0.1280.680" timestamp="1598762252134" />
     <state x="211" y="395" width="409" height="202" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1594688412055">
       <screen x="0" y="0" width="1536" height="864" />
     </state>
@@ -356,9 +379,5 @@
       <screen x="0" y="0" width="1536" height="864" />
     </state>
     <state x="565" y="479" width="672" height="520" key="search.everywhere.popup/0.0.1536.864@0.0.1536.864" timestamp="1594862867600" />
-  </component>
-  <component name="com.intellij.coverage.CoverageDataManagerImpl">
-    <SUITE FILE_PATH="coverage/semantics_analysis$Sematic.coverage" NAME="Sematic Coverage Results" MODIFIED="1597972131468" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
-    <SUITE FILE_PATH="coverage/semantics_analysis$main.coverage" NAME="main Coverage Results" MODIFIED="1598253404510" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
   </component>
 </project>
