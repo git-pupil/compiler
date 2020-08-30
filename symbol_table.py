@@ -163,6 +163,7 @@ class STManager:
                 return None
             else:  # 若没有检索到，但当前表为子表，则继续向上检索
                 return self.search_item(item_name, 'main')
+
         else:
             return None
 

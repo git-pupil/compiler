@@ -33,34 +33,37 @@ class Error(Exception):
 class CodeGeneration:
 
     def __init__(self, analysis_tree=None, semantic=None):
-        self.tree = GrammarTree
+        self.tree = analysis_tree
+        
         self.cur_state = []  # 状态栈, 记录当前所处作用域
         self.semantic = semantic
         self.st_manager = STManager
         self.outstr = ''
 
-        self.programstruct(1)
+        self.programstruct(0)
 
 
 
     def get_parent(self, node_id):
-        return self.tree[node_id].parent
+        return self.tree.grammar_tree[node_id].parent
 
     def get_child(self, node_id):
-        # print(self.tree[node_id].child, self.tree[node_id].child_num)
-        return self.tree[node_id].child, len(self.tree[node_id].child)
+        print(node_id)
+        self.tree.output()
+        print(self.tree.grammar_tree[node_id])
+        return self.tree.grammar_tree[node_id].child, len(self.tree.grammar_tree[node_id].child)
 
     def has_ancestor(self, node_id, ancestor_token):
         parent = node_id
         while True:
             parent = self.get_parent(parent)
-            if self.tree[parent].token == ancestor_token:
+            if self.tree.grammar_tree[parent].token == ancestor_token:
                 return True
-            if self.tree[parent].token == 'programstruct':
+            if self.tree.grammar_tree[parent].token == 'programstruct':
                 return False
 
     def wait(self, node_id, token):
-        if self.tree[node_id].token != token:
+        if self.tree.grammar_tree[node_id].token != token:
             raise Error('与文法不匹配')
 
     def output(self, *trans):
@@ -74,7 +77,7 @@ class CodeGeneration:
 
     def get_var_type(self, id):
         # print(self.cur_state)
-        return self.st_manager.get_variable_type(id, self.cur_state[-1])
+        return self.st_manager.get_variable_type(STManager,id, self.cur_state[-1])
 
     def get_bound(self, id):
         # print(self.cur_state)
@@ -92,6 +95,7 @@ class CodeGeneration:
 
     def programstruct(self, node_id):
         child, child_num = self.get_child(node_id)
+        print(child)
         if child_num == 4:  # program_head ; program_body .
             self.output('#include<stdio.h>\n')
             self.program_head(child[0])
@@ -143,7 +147,7 @@ class CodeGeneration:
     def idlist(self, node_id, idlist=[]):
         child, child_num = self.get_child(node_id)
         parent = self.get_parent(node_id)
-        if self.tree[parent].token == 'program_head':  # program的id不做翻译
+        if self.tree.grammar_tree[parent].token == 'program_head':  # program的id不做翻译
             return
 
         if child_num == 3:  # idlist , id
@@ -153,12 +157,12 @@ class CodeGeneration:
             # self.output(',')
 
             self.wait(child[2], 'id')
-            idlist.append(self.tree[child[2]].value)
-            # self.output(self.tree[child[2]].value)
+            idlist.append(self.tree.grammar_tree[child[2]].value)
+            # self.output(self.tree.grammar_tree[child[2]].value)
         elif child_num == 1:  # id
             self.wait(child[0], 'id')
-            idlist.append(self.tree[child[0]].value)
-            # self.output(self.tree[child[0]].value)
+            idlist.append(self.tree.grammar_tree[child[0]].value)
+            # self.output(self.tree.grammar_tree[child[0]].value)
         else:
             raise Error('文法子树个数不对')
 
@@ -173,7 +177,9 @@ class CodeGeneration:
             self.wait(child[2], ';')
             self.output(';\n')
         elif child_num == 1:  # 空
-            self.wait(child[0], None)
+            print(child[0])
+            print(node_id)
+            self.wait(child[0], 'e')
             # self.output('')
         else:
             raise Error('文法子树个数不对')
@@ -189,19 +195,19 @@ class CodeGeneration:
             id_type, id_value = self.const_value(child[4])  # 必须得到value的type才能对id进行翻译
             self.output(id_type, ' ')
             self.wait(child[2], 'id')
-            self.output(self.tree[child[2]].value)
+            self.output(self.tree.grammar_tree[child[2]].value)
             self.wait(child[3], 'relop')
-            self.output(self.tree[child[3]].value)
+            self.output(self.tree.grammar_tree[child[3]].value)
             self.output(id_value)
         elif child_num == 3:  # id = const_value
             id_type, id_value = self.const_value(child[2])
             self.output(id_type + ' ')
 
             self.wait(child[0], 'id')
-            self.output(self.tree[child[0]].value)
+            self.output(self.tree.grammar_tree[child[0]].value)
 
             self.wait(child[1], 'relop')
-            self.output(self.tree[child[1]].value)
+            self.output(self.tree.grammar_tree[child[1]].value)
             self.output(id_value)
         else:
             raise Error('文法子树个数不对')
@@ -212,24 +218,24 @@ class CodeGeneration:
             self.wait(child[0], "'")
             self.wait(child[1], 'letter')
             self.wait(child[2], "'")
-            return 'char', "'{}'".format(self.tree[child[1]].value)
+            return 'char', "'{}'".format(self.tree.grammar_tree[child[1]].value)
         elif child_num == 2:  # addop num
             self.wait(child[0], 'addop')
-            self.wait(child[1], 'num')
-            num = str(self.tree[child[1]].value)
+            self.wait(child[1], 'int_num')
+            num = str(self.tree.grammar_tree[child[1]].value)
             if '.' in num:
                 num_type = 'float'
             else:
                 num_type = 'int'
-            return num_type, "{}{}".format(self.tree[child[0]].value, self.tree[child[1]].value)
+            return num_type, "{}{}".format(self.tree.grammar_tree[child[0]].value, self.tree.grammar_tree[child[1]].value)
         elif child_num == 1:  # num
-            self.wait(child[0], 'num')
-            num = str(self.tree[child[0]].value)
+            self.wait(child[0], 'int_num')
+            num = str(self.tree.grammar_tree[child[0]].value)
             if '.' in num:
                 num_type = 'float'
             else:
                 num_type = 'int'
-            return num_type, "{}".format(self.tree[child[0]].value)
+            return num_type, "{}".format(self.tree.grammar_tree[child[0]].value)
         else:
             raise Error('文法子树个数不对')
 
@@ -300,7 +306,7 @@ class CodeGeneration:
     def basic_type(self, node_id):
         child, child_num = self.get_child(node_id)
         if child_num == 1:  # integer | real | boolean | char
-            var_type = self.tree[child[0]].value
+            var_type = self.tree.grammar_tree[child[0]].value
             if var_type == 'integer':
                 return 'int'
             if var_type == 'real':
@@ -317,15 +323,16 @@ class CodeGeneration:
         if child_num == 5:  # period , num .. num
             self.period(child[0], llist)
             self.wait(child[1], ',')
-            self.wait(child[2], 'num')
+            self.wait(child[2], 'int_num')
             self.wait(child[3], '..')
-            self.wait(child[4], 'num')
-            llist.append(str(self.tree[child[4]].value - self.tree[child[2]].value + 1))
+            self.wait(child[4], 'int_num')
+            llist.append(str(self.tree.grammar_tree[child[4]].value - self.tree.grammar_tree[child[2]].value + 1))
         elif child_num == 3:  # num .. num
-            self.wait(child[0], 'num')
+            print(self.tree.grammar_tree[child[0]].token)
+            self.wait(child[0], 'int_num')
             self.wait(child[1], '..')
-            self.wait(child[2], 'num')
-            llist.append(str(self.tree[child[2]].value - self.tree[child[0]].value + 1))
+            self.wait(child[2], 'int_num')
+            llist.append(str(int(self.tree.grammar_tree[child[2]].value) - int(self.tree.grammar_tree[child[0]].value) + 1))
 
     def subprogram_declarations(self, node_id):
         child, child_num = self.get_child(node_id)
@@ -334,7 +341,7 @@ class CodeGeneration:
             self.subprogram(child[1])
             self.wait(child[2], ';')
         if child_num == 1:  # 空
-            self.wait(child[0], None)
+            self.wait(child[0], 'e')
 
     def subprogram(self, node_id):
         child, child_num = self.get_child(node_id)
@@ -345,10 +352,10 @@ class CodeGeneration:
             self.output('\n{\n')
             schild, schild_num = self.get_child(child[0])
             if schild_num == 5:  # 带返回值的要先定义返回值
-                self.output(re_type + ' ', self.tree[schild[1]].value + '_re;\n')
+                self.output(re_type + ' ', self.tree.grammar_tree[schild[1]].value + '_re;\n')
             self.subprogram_body(child[2])
             if schild_num == 5:  # 是function的声明，函数结束要返回
-                self.output('return ', self.tree[schild[1]].value + '_re;')
+                self.output('return ', self.tree.grammar_tree[schild[1]].value + '_re;')
             self.output('\n}\n')
             self.cur_state.pop()
 
@@ -359,8 +366,8 @@ class CodeGeneration:
             self.output('void ')
 
             self.wait(child[1], 'id')
-            self.cur_state.append(self.tree[child[1]].value)
-            self.output(self.tree[child[1]].value)
+            self.cur_state.append(self.tree.grammar_tree[child[1]].value)
+            self.output(self.tree.grammar_tree[child[1]].value)
 
             pstr = self.formal_parameter(child[2])  # 输出参数以及左右括号
             self.output(pstr)
@@ -368,13 +375,13 @@ class CodeGeneration:
         elif child_num == 5:  # function id formal_parameter : basic_type
             self.wait(child[0], 'function')
             self.wait(child[1], 'id')
-            self.cur_state.append(self.tree[child[1]].value)
+            self.cur_state.append(self.tree.grammar_tree[child[1]].value)
             pstr = self.formal_parameter(child[2])
             self.wait(child[3], ':')
             re_type = self.basic_type(child[4])
 
             self.output(re_type, ' ')
-            self.output(self.tree[child[1]].value)
+            self.output(self.tree.grammar_tree[child[1]].value)
             self.output(pstr)
             return re_type
 
@@ -401,7 +408,7 @@ class CodeGeneration:
     def parameter(self, node_id, plist):
         child, child_num = self.get_child(node_id)
         if child_num == 1:  # var_parameter | value_parameter
-            if self.tree[child[0]].token == 'var_parameter':
+            if self.tree.grammar_tree[child[0]].token == 'var_parameter':
                 self.var_parameter(child[0], plist)
             else:
                 self.value_parameter(child[0], plist)
@@ -420,7 +427,7 @@ class CodeGeneration:
             self.wait(child[1], ':')
             val_type = self.basic_type(child[2])
             parent = self.get_parent(node_id)
-            if self.tree[parent].token == 'var_parameter':
+            if self.tree.grammar_tree[parent].token == 'var_parameter':
                 for id in idlist:
                     plist.append(val_type + '*' + ' ' + id)
             else:
@@ -439,7 +446,7 @@ class CodeGeneration:
         if child_num == 3:  # begin statement_list end
 
             parent = self.get_parent(node_id)
-            if self.tree[parent].token == 'subprogram_body':
+            if self.tree.grammar_tree[parent].token == 'subprogram_body':
                 self.wait(child[0], 'begin')
 
                 self.statement_list(child[1])
@@ -481,10 +488,10 @@ class CodeGeneration:
             self.output(exp)
             self.output(';')
         if child_num == 1:  # procedure_call | compound_statement | 空
-            if self.tree[child[0]].token == 'procedure_call':
+            if self.tree.grammar_tree[child[0]].token == 'procedure_call':
                 self.procedure_call(child[0])
                 self.output(';')
-            elif self.tree[child[0]].token == 'compound_statement':
+            elif self.tree.grammar_tree[child[0]].token == 'compound_statement':
                 self.compound_statement(child[0])
             else:
                 self.wait(child[0], None)
@@ -510,10 +517,10 @@ class CodeGeneration:
 
             self.output('(')
             self.wait(child[1], 'id')
-            if self.is_addr(self.tree[child[1]].value):
-                self.output('*' + self.tree[child[1]].value)
+            if self.is_addr(self.tree.grammar_tree[child[1]].value):
+                self.output('*' + self.tree.grammar_tree[child[1]].value)
             else:
-                self.output(self.tree[child[1]].value)
+                self.output(self.tree.grammar_tree[child[1]].value)
 
             self.wait(child[2], 'assignop')
             self.output('=')
@@ -523,19 +530,19 @@ class CodeGeneration:
 
             self.wait(child[4], 'to')
 
-            self.output(self.tree[child[1]].value)
+            self.output(self.tree.grammar_tree[child[1]].value)
             self.output('<=')
             self.output(self.expression(child[5]))
 
             self.wait(child[6], 'do')
             self.output(';')
 
-            self.output(self.tree[child[1]].value)
+            self.output(self.tree.grammar_tree[child[1]].value)
             self.output('++)')
 
             self.statement(child[7])
         if child_num == 4:  # read ( variable_list ) | write ( expression_list )
-            if self.tree[child[0]].token == 'read':
+            if self.tree.grammar_tree[child[0]].token == 'read':
                 self.wait(child[0], 'read')
                 self.output('scanf')
 
@@ -562,7 +569,7 @@ class CodeGeneration:
 
                 self.wait(child[3], ')')
                 self.output(');')
-            if self.tree[child[0]].token == 'write':
+            if self.tree.grammar_tree[child[0]].token == 'write':
                 self.wait(child[0], 'write')
                 self.output('printf')
                 self.wait(child[1], '(')
@@ -592,7 +599,7 @@ class CodeGeneration:
                 self.wait(child[3], ')')
                 self.output(');')
 
-            if self.tree[child[0]].token == 'while':  # while expression do statement
+            if self.tree.grammar_tree[child[0]].token == 'while':  # while expression do statement
                 self.wait(child[0], 'while')
                 self.output('while')
                 self.output('(')
@@ -614,14 +621,14 @@ class CodeGeneration:
         child, child_num = self.get_child(node_id)
         if child_num == 2:  # id id_varpart
             self.wait(child[0], 'id')
-            var_type = self.get_var_type(self.tree[child[0]].value)
+            var_type = self.get_var_type(self.tree.grammar_tree[child[0]].value)
             if var_type == 'boolean':
                 is_bool = True
             var_part = self.id_varpart(child[1])
             # 加入一个元组, (var的type, var) eg:(int, a[1][2])
-            has_ptr = '*' if self.is_addr(self.tree[child[0]].value) else ''
-            is_func = '_re' if self.is_func(self.tree[child[0]].value) else ''
-            return (var_type, has_ptr + self.tree[child[0]].value + is_func + var_part)
+            has_ptr = '*' if self.is_addr(self.tree.grammar_tree[child[0]].value) else ''
+            is_func = '_re' if self.is_func(self.tree.grammar_tree[child[0]].value) else ''
+            return (var_type, has_ptr + self.tree.grammar_tree[child[0]].value + is_func + var_part)
 
     def id_varpart(self, node_id):
         child, child_num = self.get_child(node_id)
@@ -632,8 +639,8 @@ class CodeGeneration:
             self.wait(child[2], ']')
 
             parent = self.get_parent(node_id)
-            id = self.tree[parent].child[0]
-            id_value = self.tree[id].value
+            id = self.tree.grammar_tree[parent].child[0]
+            id_value = self.tree.grammar_tree[id].value
             blist = self.get_bound(id_value)  # bound的list
 
             elist_trans = ['[{}{}]'.format(exp, '-' + str(bound)) for exp, bound in zip(elist, blist)]
@@ -646,13 +653,13 @@ class CodeGeneration:
         child, child_num = self.get_child(node_id)
         if child_num == 1:  # id
             self.wait(child[0], 'id')
-            self.output('{}()'.format(self.tree[child[0]].value))
+            self.output('{}()'.format(self.tree.grammar_tree[child[0]].value))
         elif child_num == 4:  # id ( expression_list )
             self.wait(child[0], 'id')
-            self.output(self.tree[child[0]].value)
+            self.output(self.tree.grammar_tree[child[0]].value)
 
-            if self.is_func(self.tree[child[0]].value):
-                args_list = self.get_args(self.tree[child[0]].value)
+            if self.is_func(self.tree.grammar_tree[child[0]].value):
+                args_list = self.get_args(self.tree.grammar_tree[child[0]].value)
                 print(args_list)
 
             self.wait(child[1], '(')
@@ -693,7 +700,7 @@ class CodeGeneration:
             is_bool = True
             front_exp = self.simple_expression(child[0])
             self.wait(child[1], 'relop')
-            relop = self.tree[child[1]].value
+            relop = self.tree.grammar_tree[child[1]].value
             if relop == '<>':
                 relop = '!='
             if relop == '=':
@@ -708,7 +715,7 @@ class CodeGeneration:
         if child_num == 3:  # simple_expression addop term
             exp = self.simple_expression(child[0])
             self.wait(child[1], 'addop')
-            addop = self.tree[child[1]].value
+            addop = self.tree.grammar_tree[child[1]].value
             if addop == 'or':
                 addop = '|'
             term = self.term(child[2])
@@ -722,7 +729,7 @@ class CodeGeneration:
             term = self.term(child[0])
 
             self.wait(child[1], 'mulop')
-            mulop = self.tree[child[1]].value
+            mulop = self.tree.grammar_tree[child[1]].value
             if mulop == 'div':
                 mulop = '/'
             if mulop == 'mod':
@@ -738,17 +745,17 @@ class CodeGeneration:
     def factor(self, node_id, is_bool=None):
         child, child_num = self.get_child(node_id)
         if child_num == 1:  # num | variable
-            if self.tree[child[0]].token == 'num':
-                return str(self.tree[child[0]].value)
-            if self.tree[child[0]].token == 'variable':
+            if self.tree.grammar_tree[child[0]].token == 'int_num':
+                return str(self.tree.grammar_tree[child[0]].value)
+            if self.tree.grammar_tree[child[0]].token == 'variable':
                 _, var = self.variable(child[0])
                 return var
         if child_num == 4:  # id ( expression_list )
             self.wait(child[0], 'id')
             self.wait(child[1], '(')
 
-            if self.is_func(self.tree[child[0]].value):
-                is_addr_list = self.get_args(self.tree[child[0]].value)
+            if self.is_func(self.tree.grammar_tree[child[0]].value):
+                is_addr_list = self.get_args(self.tree.grammar_tree[child[0]].value)
 
             elist = []
             self.expression_list(child[2], elist)
@@ -761,21 +768,21 @@ class CodeGeneration:
                 else:
                     args_list.append(exp)
 
-            return self.tree[child[0]].value + '({})'.format(', '.join(args_list))
+            return self.tree.grammar_tree[child[0]].value + '({})'.format(', '.join(args_list))
         if child_num == 3:  # ( expression )
             self.wait(child[0], '(')
             exp = self.expression(child[1], is_bool)
             self.wait(child[2], ')')
             return '({})'.format(exp)
         if child_num == 2:  # not factor | uminus factor
-            if self.tree[child[0]].token == 'not':
+            if self.tree.grammar_tree[child[0]].token == 'not':
                 is_bool_var = False
                 factor = self.factor(child[1], is_bool_var)
                 if is_bool_var:
                     return '!' + factor
                 else:
                     return '~' + factor
-            if self.tree[child[0]].token == 'uminus':
+            if self.tree.grammar_tree[child[0]].token == 'uminus':
                 self.wait(child[0], 'uminus')
                 factor = self.factor(child[1])
                 return '-' + factor

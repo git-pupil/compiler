@@ -19,12 +19,10 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="d6bde687-968f-443e-b7eb-c0816756218b" name="Default Changelist" comment="对语义分析进行了测试，目前发现了数组下标错误无法检测到的bug">
-      <change afterPath="$PROJECT_DIR$/code_generation.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_2020_8_21_9_08_[Default_Changelist]/shelved.patch" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_2020_8_21_9_08__Default_Changelist_.xml" beforeDir="false" />
+    <list default="true" id="d6bde687-968f-443e-b7eb-c0816756218b" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/code_generation.py" beforeDir="false" afterPath="$PROJECT_DIR$/code_generation.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/symbol_table.py" beforeDir="false" afterPath="$PROJECT_DIR$/symbol_table.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -285,7 +283,14 @@
       <option name="project" value="LOCAL" />
       <updated>1597981543313</updated>
     </task>
-    <option name="localTasksCounter" value="15" />
+    <task id="LOCAL-00015" summary="对语义分析进行了测试，目前发现了数组下标错误无法检测到的bug">
+      <created>1598763165898</created>
+      <option name="number" value="00015" />
+      <option name="presentableId" value="LOCAL-00015" />
+      <option name="project" value="LOCAL" />
+      <updated>1598763165898</updated>
+    </task>
+    <option name="localTasksCounter" value="16" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -338,25 +343,25 @@
       <screen x="0" y="0" width="1536" height="824" />
     </state>
     <state x="549" y="166" key="FileChooserDialogImpl/0.0.1536.824@0.0.1536.824" timestamp="1594448461327" />
-    <state width="1259" height="247" key="GridCell.Tab.0.bottom" timestamp="1598763153080">
+    <state width="1106" height="179" key="GridCell.Tab.0.bottom" timestamp="1598803822920">
       <screen x="0" y="0" width="1280" height="680" />
     </state>
-    <state width="1259" height="247" key="GridCell.Tab.0.bottom/0.0.1280.680@0.0.1280.680" timestamp="1598763153080" />
+    <state width="1106" height="179" key="GridCell.Tab.0.bottom/0.0.1280.680@0.0.1280.680" timestamp="1598803822920" />
     <state width="1493" height="343" key="GridCell.Tab.0.bottom/0.0.1536.864@0.0.1536.864" timestamp="1598253412569" />
-    <state width="1259" height="247" key="GridCell.Tab.0.center" timestamp="1598763153080">
+    <state width="1106" height="179" key="GridCell.Tab.0.center" timestamp="1598803822919">
       <screen x="0" y="0" width="1280" height="680" />
     </state>
-    <state width="1259" height="247" key="GridCell.Tab.0.center/0.0.1280.680@0.0.1280.680" timestamp="1598763153080" />
+    <state width="1106" height="179" key="GridCell.Tab.0.center/0.0.1280.680@0.0.1280.680" timestamp="1598803822919" />
     <state width="1493" height="343" key="GridCell.Tab.0.center/0.0.1536.864@0.0.1536.864" timestamp="1598253412569" />
-    <state width="1259" height="247" key="GridCell.Tab.0.left" timestamp="1598763153079">
+    <state width="1106" height="179" key="GridCell.Tab.0.left" timestamp="1598803822919">
       <screen x="0" y="0" width="1280" height="680" />
     </state>
-    <state width="1259" height="247" key="GridCell.Tab.0.left/0.0.1280.680@0.0.1280.680" timestamp="1598763153079" />
+    <state width="1106" height="179" key="GridCell.Tab.0.left/0.0.1280.680@0.0.1280.680" timestamp="1598803822919" />
     <state width="1493" height="343" key="GridCell.Tab.0.left/0.0.1536.864@0.0.1536.864" timestamp="1598253412569" />
-    <state width="1259" height="247" key="GridCell.Tab.0.right" timestamp="1598763153080">
+    <state width="1106" height="179" key="GridCell.Tab.0.right" timestamp="1598803822920">
       <screen x="0" y="0" width="1280" height="680" />
     </state>
-    <state width="1259" height="247" key="GridCell.Tab.0.right/0.0.1280.680@0.0.1280.680" timestamp="1598763153080" />
+    <state width="1106" height="179" key="GridCell.Tab.0.right/0.0.1280.680@0.0.1280.680" timestamp="1598803822920" />
     <state width="1493" height="343" key="GridCell.Tab.0.right/0.0.1536.864@0.0.1536.864" timestamp="1598253412569" />
     <state x="387" y="157" width="996" height="707" key="SettingsEditor" timestamp="1594863128496">
       <screen x="0" y="0" width="1536" height="864" />
@@ -367,10 +372,10 @@
       <screen x="0" y="0" width="1536" height="864" />
     </state>
     <state width="498" height="446" key="SwitcherDM/0.0.1536.864@0.0.1536.864" timestamp="1595054185821" />
-    <state x="337" y="169" key="com.intellij.ide.util.TipDialog" timestamp="1598762252134">
+    <state x="337" y="169" key="com.intellij.ide.util.TipDialog" timestamp="1598797148441">
       <screen x="0" y="0" width="1280" height="680" />
     </state>
-    <state x="337" y="169" key="com.intellij.ide.util.TipDialog/0.0.1280.680@0.0.1280.680" timestamp="1598762252134" />
+    <state x="337" y="169" key="com.intellij.ide.util.TipDialog/0.0.1280.680@0.0.1280.680" timestamp="1598797148441" />
     <state x="211" y="395" width="409" height="202" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1594688412055">
       <screen x="0" y="0" width="1536" height="864" />
     </state>
