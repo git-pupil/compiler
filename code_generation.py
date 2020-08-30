@@ -77,7 +77,7 @@ class CodeGeneration:
 
     def get_var_type(self, id):
         # print(self.cur_state)
-        return self.st_manager.get_variable_type(STManager,id, self.cur_state[-1])
+        return self.st_manager.get_variable_type(id, self.cur_state[-1])
 
     def get_bound(self, id):
         # print(self.cur_state)
