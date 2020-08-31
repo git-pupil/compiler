@@ -878,3 +878,17 @@ class SemanticAnalyzer:
                                                                             child_node.column, sub_factor[1]))
                         self.result = False
         return factor
+
+    def get_exp_type(self, node_id, table_name):
+        """
+        获取一个expression 的表达式的类型
+        返回值：基本类型 错误返回None
+        """
+
+        self.st_manager.current_table_name = table_name
+        return_item = self.expression(node_id)
+        self.st_manager.current_table_name = None
+        if len(return_item) != 0:
+            return return_item[1]
+        else:
+            return None

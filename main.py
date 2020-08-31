@@ -26,7 +26,7 @@ filename=[
     "test/semantics_right.pas",  # 18 完全正确的PPT代码示例
 ]
 
-result = word_analyse(filename[6])
+result = word_analyse(filename[5])
 
 # for word in result:
 #     print(word)
