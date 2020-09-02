@@ -1,2 +1,2 @@
-# semantics-analysis
-编译原理课设语义分析部分
+# compiler
+编译原理课程设计 pascal-s编译程序
