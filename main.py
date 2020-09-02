@@ -42,5 +42,6 @@ if sematic.result:
     print('语义分析正确')
 sematic.st_manager.output_table_item()
 
+
 print('代码生成如下:')
 code_generetion = CodeGeneration(grammar_tree, sematic)
