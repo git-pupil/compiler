@@ -20,11 +20,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="d6bde687-968f-443e-b7eb-c0816756218b" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/compiler.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/semantics_analysis.py" beforeDir="false" afterPath="$PROJECT_DIR$/semantics_analysis.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/semantics_err2.pas" beforeDir="false" afterPath="$PROJECT_DIR$/test/semantics_err2.pas" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -70,6 +68,7 @@
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="TERMINAL_CUSTOM_COMMANDS_GOT_IT" value="true" />
+    <property name="ToolWindowRun.ShowToolbar" value="false" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
@@ -203,7 +202,10 @@
       <workItem from="1597972122770" duration="642000" />
       <workItem from="1597978168057" duration="4473000" />
       <workItem from="1598251906990" duration="1603000" />
-      <workItem from="1599025198708" duration="2921000" />
+      <workItem from="1599025198708" duration="3104000" />
+      <workItem from="1599028437264" duration="994000" />
+      <workItem from="1599039132051" duration="793000" />
+      <workItem from="1599044197795" duration="5802000" />
     </task>
     <task id="LOCAL-00001" summary="增加了变量声明部分的符号表建立操作">
       <created>1594260792066</created>
@@ -310,7 +312,14 @@
       <option name="project" value="LOCAL" />
       <updated>1598763165898</updated>
     </task>
-    <option name="localTasksCounter" value="16" />
+    <task id="LOCAL-00016" summary="改正了语义分析中，符号表返回数组范围错误的bug">
+      <created>1599028167911</created>
+      <option name="number" value="00016" />
+      <option name="presentableId" value="LOCAL-00016" />
+      <option name="project" value="LOCAL" />
+      <updated>1599028167911</updated>
+    </task>
+    <option name="localTasksCounter" value="17" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -344,7 +353,8 @@
     <MESSAGE value="修改了符号表" />
     <MESSAGE value="改正了函数参数判断错误的bug" />
     <MESSAGE value="对语义分析进行了测试，目前发现了数组下标错误无法检测到的bug" />
-    <option name="LAST_COMMIT_MESSAGE" value="对语义分析进行了测试，目前发现了数组下标错误无法检测到的bug" />
+    <MESSAGE value="改正了语义分析中，符号表返回数组范围错误的bug" />
+    <option name="LAST_COMMIT_MESSAGE" value="改正了语义分析中，符号表返回数组范围错误的bug" />
   </component>
   <component name="WindowStateProjectService">
     <state x="96" y="0" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1598762219965">
@@ -444,6 +454,6 @@
     </watches-manager>
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
-    <SUITE FILE_PATH="coverage/compiler$main.coverage" NAME="main Coverage Results" MODIFIED="1599028036745" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/compiler$main.coverage" NAME="main Coverage Results" MODIFIED="1599050780876" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
   </component>
 </project>

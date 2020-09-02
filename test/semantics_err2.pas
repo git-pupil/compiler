@@ -6,12 +6,12 @@ end;
 function gcd(a,b:integer):integer;
 var z : real;
 begin
-gcd(a, z); {arguments type error}
-gcd;  {need arguments}
-test(a); {do not need arguments}
+gcd(a, z); {parameters type error}
+gcd;  {need parameters}
+test(a); {do not need parameters}
 x(a);  {not be a function}
 if b then gcd:=a {if A then B}
-else gcd:=gcd(b); {function arguments wrong}
+else gcd:=gcd(b); {function parameters wrong}
 while a do {while must be boolean}
 a := 2;
 for a := 0 to 2.5 do {must be integer}

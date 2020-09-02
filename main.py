@@ -26,22 +26,23 @@ filename=[
     "test/semantics_right.pas",  # 18 完全正确的PPT代码示例
 ]
 
-result = word_analyse(filename[5])
+result = word_analyse(filename[6])
 
 # for word in result:
 #     print(word)
 
 grammar_tree=grammar_analyse(result)
 
-grammar_tree.output()
+# grammar_tree.output()
 
 sematic = SemanticAnalyzer(grammar_tree)
 sematic.programstruct()
 
 if sematic.result:
     print('语义分析正确')
-sematic.st_manager.output_table_item()
+    # sematic.st_manager.output_table_item()
+    print('代码生成如下:')
+    code_generetion = CodeGeneration(grammar_tree, sematic)
 
 
-print('代码生成如下:')
-code_generetion = CodeGeneration(grammar_tree, sematic)
+
