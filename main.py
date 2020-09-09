@@ -1,4 +1,4 @@
-from wordanalyse import word_analyse
+from lexical_analyse import word_analyse
 from grammar_analyse import grammar_analyse
 from semantics_analysis import *
 from symbol_table import *
@@ -26,7 +26,7 @@ filename=[
     "test/semantics_right.pas",  # 18 完全正确的PPT代码示例
 ]
 
-result = word_analyse(filename[6])
+result = word_analyse(filename[7])
 
 # for word in result:
 #     print(word)
